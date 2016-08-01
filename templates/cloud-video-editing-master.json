@@ -1,31 +1,7 @@
 [
     {
-        "ParameterKey": "ADServer1InstanceType",
-        "ParameterValue": "m4.xlarge"
-    },
-    {
-        "ParameterKey": "ADServer1NetBIOSName",
-        "ParameterValue": "DC1"
-    },
-    {
-        "ParameterKey": "ADServer1PrivateIP",
-        "ParameterValue": "10.0.0.10"
-    },
-    {
-        "ParameterKey": "ADServer2InstanceType",
-        "ParameterValue": "m4.xlarge"
-    },
-    {
-        "ParameterKey": "ADServer2NetBIOSName",
-        "ParameterValue": "DC2"
-    },
-    {
-        "ParameterKey": "ADServer2PrivateIP",
-        "ParameterValue": "10.0.32.10"
-    },
-    {
         "ParameterKey": "AvailabilityZones",
-        "ParameterValue": "us-east-1b,us-east-1c"
+        "ParameterValue": "$[alfred_genaz_2]"
     },
     {
         "ParameterKey": "DomainAdminPassword",
