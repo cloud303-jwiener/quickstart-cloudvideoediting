@@ -1,169 +1,18 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
     "Description": "This template deploys the Cloud Video Editing Quick Start. **WARNING** This template creates Amazon EC2 Windows instance and related resources. You will be billed for the AWS resources used if you create a stack from this template.",
-    "Metadata": {
-        "AWS::CloudFormation::Interface": {
-            "ParameterGroups": [
-                {
-                    "Label": {
-                        "default": "Network Configuration"
-                    },
-                    "Parameters": [
-                        "AvailabilityZones",
-                        "VPCCIDR",
-                        "PrivateSubnet1CIDR",
-                        "PrivateSubnet2CIDR",
-                        "PublicSubnet1CIDR",
-                        "PublicSubnet2CIDR",
-                        "RDGWCIDR"
-                    ]
-                },
-                {
-                    "Label": {
-                        "default": "Amazon EC2 Configuration"
-                    },
-                    "Parameters": [
-                        "KeyPairName",
-                        "NATInstanceType",
-                        "RDGW1InstanceType",
-                        "RDGW1NetBIOSName",
-                        "RDGW1PrivateIP",
-                        "RDGW2InstanceType",
-                        "RDGW2NetBIOSName",
-                        "RDGW2PrivateIP"
-                    ]
-                },
-                {
-                    "Label": {
-                        "default": "Microsoft Active Directory Configuration"
-                    },
-                    "Parameters": [
-                        "DomainDNSName",
-                        "DomainNetBIOSName",
-                        "DomainAdminPassword"
-                    ]
-                },
-                {
-                    "Label": {
-                        "default": "AWS Quick Start Configuration"
-                    },
-                    "Parameters": [
-                        "QSS3BucketName",
-                        "QSS3KeyPrefix"
-                    ]
-                }
-            ],
-            "ParameterLabels": {
-                "AvailabilityZones": {
-                    "default": "Availability Zones"
-                },
-                "DomainAdminPassword": {
-                    "default": "Domain Admin Password"
-                },
-                "DomainDNSName": {
-                    "default": "Domain DNS Name"
-                },
-                "DomainNetBIOSName": {
-                    "default": "Domain NetBIOS Name"
-                },
-                "KeyPairName": {
-                    "default": "Key Pair Name"
-                },
-                "NATInstanceType": {
-                    "default": "NAT Instance Type"
-                },
-                "PrivateSubnet1CIDR": {
-                    "default": "Private Subnet 1 CIDR"
-                },
-                "PrivateSubnet2CIDR": {
-                    "default": "Private Subnet 2 CIDR"
-                },
-                "PublicSubnet1CIDR": {
-                    "default": "Public Subnet 1 CIDR"
-                },
-                "PublicSubnet2CIDR": {
-                    "default": "Public Subnet 2 CIDR"
-                },
-                "QSS3BucketName": {
-                    "default": "Quick Start S3 Bucket Name"
-                },
-                "QSS3KeyPrefix": {
-                    "default": "Quick Start S3 Key Prefix"
-                },
-                "RDGW1InstanceType": {
-                    "default": "Remote Desktop Gateway 1 Instance Type"
-                },
-                "RDGW1NetBIOSName": {
-                    "default": "Remote Desktop Gateway 1 NetBIOS Name"
-                },
-                "RDGW1PrivateIP": {
-                    "default": "Remote Desktop Gateway 1 Private IP Address"
-                },
-                "RDGW2InstanceType": {
-                    "default": "Remote Desktop Gateway 2 Instance Type"
-                },
-                "RDGW2NetBIOSName": {
-                    "default": "Remote Desktop Gateway 2 NetBIOS Name"
-                },
-                "RDGW2PrivateIP": {
-                    "default": "Remote Desktop Gateway 2 Private IP Address"
-                },
-                "RDGWCIDR": {
-                    "default": "Allowed Remote Desktop Gateway External Access CIDR"
-                },
-                "VPCCIDR": {
-                    "default": "VPC CIDR"
-                }
-            }
-        }
-    },
     "Parameters": {
         "AvailabilityZones": {
             "Description": "List of Availability Zones to use for the subnets in the VPC. Note: The logical order is preserved and only 2 AZs are used for this deployment.",
             "Type": "List<AWS::EC2::AvailabilityZone::Name>"
         },
-        "DomainAdminPassword": {
-            "AllowedPattern": "(?=^.{6,255}$)((?=.*\\d)(?=.*[A-Z])(?=.*[a-z])|(?=.*\\d)(?=.*[^A-Za-z0-9])(?=.*[a-z])|(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])|(?=.*\\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]))^.*",
-            "Description": "Password for the domain admin user. Must be at least 8 characters containing letters, numbers and symbols",
-            "MaxLength": "32",
-            "MinLength": "8",
-            "NoEcho": "true",
-            "Type": "String"
-        },
-        "DomainDNSName": {
-            "AllowedPattern": "[a-zA-Z0-9]+\\..+",
-            "Default": "example.com",
-            "Description": "Fully qualified domain name (FQDN) of the forest root domain e.g. example.com",
-            "MaxLength": "25",
-            "MinLength": "3",
-            "Type": "String"
-        },
-        "DomainNetBIOSName": {
-            "AllowedPattern": "[a-zA-Z0-9]+",
-            "Default": "example",
-            "Description": "NetBIOS name of the domain (up to 15 characters) for users of earlier versions of Windows e.g. EXAMPLE",
-            "MaxLength": "15",
-            "MinLength": "1",
-            "Type": "String"
+        "InstanceType": {
+            "Type": "String",
+            "Description": "Which GPU instance type are we using?"
         },
         "KeyPairName": {
             "Description": "Public/private key pairs allow you to securely connect to your instance after it launches",
             "Type": "AWS::EC2::KeyPair::KeyName"
-        },
-        "NATInstanceType": {
-            "AllowedValues": [
-                "t2.nano",
-                "t2.micro",
-                "t2.small",
-                "t2.medium",
-                "t2.large",
-                "m3.medium",
-                "m3.large",
-                "m4.large"
-            ],
-            "Default": "t2.small",
-            "Description": "Amazon EC2 instance type for the NAT Instances. This is only used if the region does not support NAT gateways.",
-            "Type": "String"
         },
         "PrivateSubnet1CIDR": {
             "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$",
@@ -189,81 +38,19 @@
             "Description": "CIDR Block for the public DMZ subnet 2 located in Availability Zone 2",
             "Type": "String"
         },
+
         "QSS3BucketName": {
-            "AllowedPattern": "^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$",
-            "ConstraintDescription": "Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).",
-            "Default": "quickstart-reference",
-            "Description": "S3 bucket name for the Quick Start assets. Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).",
-            "Type": "String"
+            "Type": "String",
+            "Default": "Quick Start S3 Bucket Name"
         },
         "QSS3KeyPrefix": {
-            "AllowedPattern": "^[0-9a-zA-Z-]+(/[0-9a-zA-Z-]+)*$",
-            "ConstraintDescription": "Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/). It cannot start or end with forward slash (/) because they are automatically appended.",
-            "Default": "cloudvideoediting/latest",
-            "Description": "S3 key prefix for the Quick Start assets. Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/). It cannot start or end with forward slash (/) because they are automatically appended.",
-            "Type": "String"
-        },
-        "RDGW1InstanceType": {
-            "Description": "Amazon EC2 instance type for the first Remote Desktop Gateway instance",
             "Type": "String",
-            "Default": "t2.large",
-            "AllowedValues": [
-                "t2.large",
-                "m3.large",
-                "m3.xlarge",
-                "m3.2xlarge",
-                "m4.large",
-                "m4.xlarge",
-                "m4.2xlarge",
-                "m4.4xlarge"
-            ]
+            "Default": "Quick Start S3 Key Prefix"
         },
-        "RDGW1NetBIOSName": {
-            "Description": "NetBIOS name of the first Remote Desktop Gateway (up to 15 characters)",
+        "StackTimeout": {
             "Type": "String",
-            "Default": "RDGW1",
-            "MinLength": "1",
-            "MaxLength": "15",
-            "AllowedPattern": "[a-zA-Z0-9]+"
-        },
-        "RDGW1PrivateIP": {
-            "Description": "Fixed private IP for the first Remote Desktop Gateway located in Availability Zone 1",
-            "Type": "String",
-            "Default": "10.0.128.11"
-        },
-        "RDGW2InstanceType": {
-            "Description": "Amazon EC2 instance type for the second Remote Desktop Gateway instance",
-            "Type": "String",
-            "Default": "t2.large",
-            "AllowedValues": [
-                "t2.large",
-                "m3.large",
-                "m3.xlarge",
-                "m3.2xlarge",
-                "m4.large",
-                "m4.xlarge",
-                "m4.2xlarge",
-                "m4.4xlarge"
-            ]
-        },
-        "RDGW2NetBIOSName": {
-            "Description": "NetBIOS name of the second Remote Desktop Gateway (up to 15 characters)",
-            "Type": "String",
-            "Default": "RDGW2",
-            "MinLength": "1",
-            "MaxLength": "15",
-            "AllowedPattern": "[a-zA-Z0-9]+"
-        },
-        "RDGW2PrivateIP": {
-            "Description": "Fixed private IP for the second Remote Desktop Gateway located in Availability Zone 2",
-            "Type": "String",
-            "Default": "10.0.144.11"
-        },
-        "RDGWCIDR": {
-            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$",
-            "Default": "0.0.0.0/0",
-            "Description": "Allowed CIDR Block for external access to the Remote Desktop Gateways",
-            "Type": "String"
+            "Description": "Amount of time we wait before failing the stack",
+            "Default": "PT45M"
         },
         "VPCCIDR": {
             "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$",
@@ -271,6 +58,7 @@
             "Description": "CIDR Block for the VPC",
             "Type": "String"
         }
+
     },
     "Mappings": {
         "AWSInfoRegionMap": {
@@ -322,7 +110,25 @@
                 "Partition": "aws",
                 "QuickStartS3URL": "https://s3.amazonaws.com"
             }
+        },
+        "SoftwareMap": {
+            "url" : {
+                "teradici": "https://dl.dropbox.com/sh/a6mjoxkb03gnghf/AADmNMMpIWQMOMSogX8ERI2ja/PCoIP_agent_release_installer_2.5.1.908_graphics.exe?dl=1",
+                "nvidia": "http://us.download.nvidia.com/Windows/Quadro_Certified/369.26/369.26-quadro-tesla-grid-winserv2008-2008r2-2012-64bit-international-whql.exe"
+            }
+        },
+        "WindowsAMIMap": {
+            "us-east-1": { "windowsServer2008r2": "ami-98c1a28f" },
+            "us-west-1": { "windowsServer2008r2": "" },
+            "us-west-2": { "windowsServer2008r2": "" },
+            "eu-west-1": { "windowsServer2008r2": "" },
+            "sa-east-1": { "windowsServer2008r2": "" },
+            "ap-southeast-1": { "windowsServer2008r2": "" },
+            "ap-southeast-2": { "windowsServer2008r2": "" },
+            "ap-northeast-1": { "windowsServer2008r2": "" }
         }
+
+
     },
     "Resources": {
         "VPCStack": {
@@ -364,9 +170,6 @@
                     "KeyPairName": {
                         "Ref": "KeyPairName"
                     },
-                    "NATInstanceType": {
-                        "Ref": "NATInstanceType"
-                    },
                     "NumberOfAZs": "2",
                     "PrivateSubnet1ACIDR": {
                         "Ref": "PrivateSubnet1CIDR"
@@ -386,208 +189,168 @@
                 }
             }
         },
-        "ADStack": {
-            "DependsOn": "VPCStack",
-            "Type": "AWS::CloudFormation::Stack",
+        "IamRole": {
+            "Type": "AWS::IAM::Role",
             "Properties": {
-                "TemplateURL": {
-                    "Fn::Join": [
-                        "/",
-                        [
-                            {
-                                "Fn::FindInMap": [
-                                    "AWSInfoRegionMap",
-                                    {
-                                        "Ref": "AWS::Region"
-                                    },
-                                    "QuickStartS3URL"
-                                ]
-                            },
-                            {
-                                "Ref": "QSS3BucketName"
-                            },
-                            {
-                                "Ref": "QSS3KeyPrefix"
-                            },
-                            "submodules/quickstart-microsoft-activedirectory",
-                            "templates/ad-2012r2-3.template"
-                        ]
-                    ]
+                "AssumeRolePolicyDocument": {
+                    "Version" : "2012-10-17",
+                    "Statement": [ {
+                        "Effect": "Allow",
+                        "Principal": {
+                            "Service": [ "ec2.amazonaws.com" ]
+                        },
+                        "Action": [ "sts:AssumeRole" ]
+                    } ]
                 },
-                "Parameters": {
-                    "DomainAdminPassword": {
-                        "Ref": "DomainAdminPassword"
-                    },
-                    "DomainDNSName": {
-                        "Ref": "DomainDNSName"
-                    },
-                    "DomainNetBIOSName": {
-                        "Ref": "DomainNetBIOSName"
-                    },
-                    "PrivateSubnet1CIDR": {
-                        "Ref": "PrivateSubnet1CIDR"
-                    },
-                    "PrivateSubnet1ID": {
-                        "Fn::GetAtt": [
-                            "VPCStack",
-                            "Outputs.PrivateSubnet1AID"
-                        ]
-                    },
-                    "PrivateSubnet2CIDR": {
-                        "Ref": "PrivateSubnet2CIDR"
-                    },
-                    "PrivateSubnet2ID": {
-                        "Fn::GetAtt": [
-                            "VPCStack",
-                            "Outputs.PrivateSubnet2AID"
-                        ]
-                    },
-                    "PublicSubnet1CIDR": {
-                        "Ref": "PublicSubnet1CIDR"
-                    },
-                    "PublicSubnet2CIDR": {
-                        "Ref": "PublicSubnet2CIDR"
-                    },
-                    "QSS3BucketName": {
-                        "Ref": "QSS3BucketName"
-                    },
-                    "QSS3KeyPrefix": {
-                        "Fn::Join": [
-                            "/",
-                            [
+                "Path": "/",
+                "Policies": [
+                    {
+                        "PolicyName": "AwsServiceAccess",
+                        "PolicyDocument": {
+                            "Version": "2012-10-17",
+                            "Statement": [
                                 {
-                                    "Ref": "QSS3KeyPrefix"
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "s3:PutObject",
+                                        "s3:GetObject",
+                                        "s3:DeleteObject"
+                                    ],
+                                    "Resource": [ "arn:aws:s3:::premiere-poc/*" ]
                                 },
-                                "submodules/quickstart-microsoft-activedirectory"
+                                {
+                                    "Sid": "Stmt1463078504000",
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "logs:CreateLogGroup",
+                                        "logs:CreateLogStream",
+                                        "logs:DescribeLogGroups",
+                                        "logs:DescribeLogStreams",
+                                        "logs:PutLogEvents"
+                                    ],
+                                    "Resource": [ "*" ]
+                                }
                             ]
-                        ]
-                    },
-                    "VPCCIDR": {
-                        "Ref": "VPCCIDR"
-                    },
-                    "VPCID": {
-                        "Fn::GetAtt": [
-                            "VPCStack",
-                            "Outputs.VPCID"
-                        ]
+                        }
+                    }
+
+                ]
+            }
+        },
+        "IAMInstanceProfile": {
+            "Type": "AWS::IAM::InstanceProfile",
+            "Properties": {
+                "Path": "/",
+                "Roles": [ { "Ref": "IamRole" } ]
+            }
+        },
+        "MyInstance": {
+            "DependsOn": "VPCStack",
+            "Type": "AWS::EC2::Instance",
+            "Properties": {
+                "BlockDeviceMappings" : [
+                    {
+                        "DeviceName" : "/dev/sda1",
+                        "Ebs" : { "VolumeSize" : "60" }
+                    }
+                ],
+                "InstanceType": {"Ref": "InstanceType"},
+                "IamInstanceProfile": {"Ref": "IAMInstanceProfile"},
+                "ImageId": { "Fn::FindInMap" : [ "WindowsAMIMap", { "Ref" : "AWS::Region" }, "windowsServer2008r2" ]},
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "edit-host-1"
+                    }
+                ],
+                "NetworkInterfaces" : [{
+                    "GroupSet"                 : [{ "Ref" : "EditHostSecurityGroup" }],
+                    "DeviceIndex"              : "0",
+                    "SubnetId"                 : { "Fn::GetAtt": [ "VPCStack",
+                        "Outputs.PublicSubnet1ID"
+                    ] }
+                }],
+                "KeyName": { "Ref": "KeyPairName" },
+                "UserData" : { "Fn::Base64" : { "Fn::Join" : ["", [
+                    "<script>\n",
+                    "cfn-init.exe -v -s ", { "Ref" : "AWS::StackName" },
+                    " -r MyInstance",
+                    " --region ", { "Ref" : "AWS::Region" }, "\n",
+                    "</script>\n"
+                ]]}}
+            },
+            "CreationPolicy": {
+                "ResourceSignal": {
+                    "Count": "1",
+                    "Timeout": { "Ref": "StackTimeout" }
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Init": {
+                    "config" : {
+                        "files": {
+                            "c:\\Users\\Administrator\\Downloads\\PCoIP_agent_release_installer_2.5.1.908_graphics.exe": {
+                                "source":  {"Fn::FindInMap" : [ "SoftwareMap", "url", "teradici" ]}
+                            },
+                            "c:\\Users\\Administrator\\Downloads\\install-video-editor.ps1": {
+                                "source": {
+                                    "Fn::Join" :  [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/install-video-editor.ps1"
+                                        ]
+                                    ] }
+                            },
+                            "c:\\Users\\Administrator\\Downloads\\369.26-quadro-tesla-grid-winserv2008-2008r2-2012-64bit-international-whql.exe": {
+                                "source":  {"Fn::FindInMap" : [ "SoftwareMap", "url", "nvidia" ]}
+                            }
+                        },
+                        "commands": {
+                            "01-install": {
+                                "command": {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            "powershell.exe -ExecutionPolicy Unrestricted C:\\Users\\Administrator\\Downloads\\install-video-editor.ps1 -stack \"",
+                                            { "Ref": "AWS::StackName" }, "\" -resource \"MyInstance\""
+                                        ]
+                                    ]
+                                }
+                            }
+                        }
                     }
                 }
             }
         },
-        "RDGWStack": {
-            "DependsOn": "ADStack",
-            "Type": "AWS::CloudFormation::Stack",
+        "EditHostSecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
             "Properties": {
-                "TemplateURL": {
-                    "Fn::Join": [
-                        "/",
-                        [
-                            {
-                                "Fn::FindInMap": [
-                                    "AWSInfoRegionMap",
-                                    {
-                                        "Ref": "AWS::Region"
-                                    },
-                                    "QuickStartS3URL"
-                                ]
-                            },
-                            {
-                                "Ref": "QSS3BucketName"
-                            },
-                            {
-                                "Ref": "QSS3KeyPrefix"
-                            },
-                            "submodules/quickstart-microsoft-rdgateway",
-                            "templates/rdgw-domain.template"
-                        ]
-                    ]
-                },
-                "Parameters": {
-                    "ADServer1PrivateIP": {
-                        "Fn::GetAtt": [
-                            "ADStack",
-                            "Outputs.ADServer1PrivateIP"
-                        ]
-                    },
-                    "ADServer2PrivateIP": {
-                        "Fn::GetAtt": [
-                            "ADStack",
-                            "Outputs.ADServer2PrivateIP"
-                        ]
-                    },
-                    "DomainAdminPassword": {
-                        "Ref": "DomainAdminPassword"
-                    },
-                    "DomainAdminUser": "admin",
-                    "DomainDNSName": {
-                        "Ref": "DomainDNSName"
-                    },
-                    "DomainMemberSGID": {
-                        "Fn::GetAtt": [
-                            "ADStack",
-                            "Outputs.DomainMemberSGID"
-                        ]
-                    },
-                    "DomainNetBIOSName": {
-                        "Ref": "DomainNetBIOSName"
-                    },
-                    "KeyPairName": {
-                        "Ref": "KeyPairName"
-                    },
-                    "PublicSubnet1ID": {
-                        "Fn::GetAtt": [
-                            "VPCStack",
-                            "Outputs.PublicSubnet1ID"
-                        ]
-                    },
-                    "PublicSubnet2ID": {
-                        "Fn::GetAtt": [
-                            "VPCStack",
-                            "Outputs.PublicSubnet2ID"
-                        ]
-                    },
-                    "QSS3BucketName": {
-                        "Ref": "QSS3BucketName"
-                    },
-                    "QSS3KeyPrefix": {
-                        "Fn::Join": [
-                            "/",
-                            [
-                                {
-                                    "Ref": "QSS3KeyPrefix"
-                                },
-                                "submodules/quickstart-microsoft-rdgateway"
-                            ]
-                        ]
-                    },
-                    "RDGW1InstanceType": {
-                        "Ref": "RDGW1InstanceType"
-                    },
-                    "RDGW1NetBIOSName": {
-                        "Ref": "RDGW1NetBIOSName"
-                    },
-                    "RDGW1PrivateIP": {
-                        "Ref": "RDGW1PrivateIP"
-                    },
-                    "RDGW2InstanceType": {
-                        "Ref": "RDGW2InstanceType"
-                    },
-                    "RDGW2NetBIOSName": {
-                        "Ref": "RDGW2NetBIOSName"
-                    },
-                    "RDGW2PrivateIP": {
-                        "Ref": "RDGW2PrivateIP"
-                    },
-                    "RDGWCIDR": {
-                        "Ref": "RDGWCIDR"
-                    },
-                    "VPCID": {
-                        "Fn::GetAtt": [
-                            "VPCStack",
-                            "Outputs.VPCID"
-                        ]
+                "GroupDescription": "ssh and web",
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "3389",
+                        "ToPort": "3389",
+                        "CidrIp": "0.0.0.0/0"
                     }
-                }
+
+                ],
+                "VpcId": { "Fn::GetAtt": [ "VPCStack", "Outputs.VPCID" ] }
             }
         }
     }

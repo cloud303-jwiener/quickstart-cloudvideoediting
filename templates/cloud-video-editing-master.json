@@ -7,21 +7,14 @@
         "ParameterKey": "DomainAdminPassword",
         "ParameterValue": "$[alfred_genpass_32]"
     },
+
     {
-        "ParameterKey": "DomainDNSName",
-        "ParameterValue": "example.com"
-    },
-    {
-        "ParameterKey": "DomainNetBIOSName",
-        "ParameterValue": "example"
+        "ParameterKey": "InstanceType",
+        "ParameterValue": "g2.2xlarge"
     },
     {
         "ParameterKey": "KeyPairName",
         "ParameterValue": "cikey"
-    },
-    {
-        "ParameterKey": "NATInstanceType",
-        "ParameterValue": "t2.small"
     },
     {
         "ParameterKey": "PrivateSubnet1CIDR",
@@ -40,35 +33,16 @@
         "ParameterValue": "10.0.144.0/20"
     },
     {
-        "ParameterKey": "RDGW1InstanceType",
-        "ParameterValue": "t2.large"
+        "ParameterKey": "QSS3BucketName",
+        "ParameterValue": "mark-awsquickstart-test"
     },
     {
-        "ParameterKey": "RDGW1NetBIOSName",
-        "ParameterValue": "RDGW1"
-    },
-    {
-        "ParameterKey": "RDGW1PrivateIP",
-        "ParameterValue": "10.0.128.11"
-    },
-    {
-        "ParameterKey": "RDGW2InstanceType",
-        "ParameterValue": "t2.large"
-    },
-    {
-        "ParameterKey": "RDGW2NetBIOSName",
-        "ParameterValue": "RDGW2"
-    },
-    {
-        "ParameterKey": "RDGW2PrivateIP",
-        "ParameterValue": "10.0.144.11"
-    },
-    {
-        "ParameterKey": "RDGWCIDR",
-        "ParameterValue": "10.0.0.0/16"
+        "ParameterKey": "QSS3KeyPrefix",
+        "ParameterValue": "videoediting"
     },
     {
         "ParameterKey": "VPCCIDR",
         "ParameterValue": "10.0.0.0/16"
     }
+
 ]
