@@ -8,7 +8,8 @@
         },
         "InstanceType": {
             "Type": "String",
-            "Description": "Which GPU instance type are we using?"
+            "Description": "Which GPU instance type are we using?",
+            "Default": "g2.8xlarge"
         },
         "KeyPairName": {
             "Description": "Public/private key pairs allow you to securely connect to your instance after it launches",
@@ -41,11 +42,11 @@
 
         "QSS3BucketName": {
             "Type": "String",
-            "Default": "Quick Start S3 Bucket Name"
+            "Default": "mark-world-share"
         },
         "QSS3KeyPrefix": {
             "Type": "String",
-            "Default": "Quick Start S3 Key Prefix"
+            "Default": "edit-quickstart"
         },
         "StackTimeout": {
             "Type": "String",
@@ -61,6 +62,43 @@
 
     },
     "Mappings": {
+
+        "Region2Principal" : {
+            "us-east-1"      : { "EC2Principal" : "ec2.amazonaws.com", "OpsWorksPrincipal" : "opsworks.amazonaws.com" },
+            "us-west-2"      : { "EC2Principal" : "ec2.amazonaws.com", "OpsWorksPrincipal" : "opsworks.amazonaws.com" },
+            "us-west-1"      : { "EC2Principal" : "ec2.amazonaws.com", "OpsWorksPrincipal" : "opsworks.amazonaws.com" },
+            "eu-west-1"      : { "EC2Principal" : "ec2.amazonaws.com", "OpsWorksPrincipal" : "opsworks.amazonaws.com" },
+            "eu-west-2"      : { "EC2Principal" : "ec2.amazonaws.com", "OpsWorksPrincipal" : "opsworks.amazonaws.com" },
+            "ap-southeast-1" : { "EC2Principal" : "ec2.amazonaws.com", "OpsWorksPrincipal" : "opsworks.amazonaws.com" },
+            "ap-northeast-1" : { "EC2Principal" : "ec2.amazonaws.com", "OpsWorksPrincipal" : "opsworks.amazonaws.com" },
+            "ap-northeast-2" : { "EC2Principal" : "ec2.amazonaws.com", "OpsWorksPrincipal" : "opsworks.amazonaws.com" },
+            "ap-southeast-2" : { "EC2Principal" : "ec2.amazonaws.com", "OpsWorksPrincipal" : "opsworks.amazonaws.com" },
+            "ap-south-1"     : { "EC2Principal" : "ec2.amazonaws.com", "OpsWorksPrincipal" : "opsworks.amazonaws.com" },
+            "us-east-2"      : { "EC2Principal" : "ec2.amazonaws.com", "OpsWorksPrincipal" : "opsworks.amazonaws.com" },
+            "ca-central-1"   : { "EC2Principal" : "ec2.amazonaws.com", "OpsWorksPrincipal" : "opsworks.amazonaws.com" },
+            "sa-east-1"      : { "EC2Principal" : "ec2.amazonaws.com", "OpsWorksPrincipal" : "opsworks.amazonaws.com" },
+            "cn-north-1"     : { "EC2Principal" : "ec2.amazonaws.com.cn", "OpsWorksPrincipal" : "opsworks.amazonaws.com.cn" },
+            "eu-central-1"   : { "EC2Principal" : "ec2.amazonaws.com", "OpsWorksPrincipal" : "opsworks.amazonaws.com" }
+        },
+
+        "Region2ARNPrefix": {
+            "us-east-1"      : { "ARNPrefix": "arn:aws:" },
+            "us-west-1"      : { "ARNPrefix": "arn:aws:" },
+            "us-west-2"      : { "ARNPrefix": "arn:aws:" },
+            "eu-west-1"      : { "ARNPrefix": "arn:aws:" },
+            "eu-west-2"      : { "ARNPrefix": "arn:aws:" },
+            "ap-northeast-1" : { "ARNPrefix": "arn:aws:" },
+            "ap-northeast-2" : { "ARNPrefix": "arn:aws:" },
+            "ap-southeast-1" : { "ARNPrefix": "arn:aws:" },
+            "ap-southeast-2" : { "ARNPrefix": "arn:aws:" },
+            "ap-south-1"     : { "ARNPrefix": "arn:aws:" },
+            "us-east-2"      : { "ARNPrefix": "arn:aws:" },
+            "ca-central-1"   : { "ARNPrefix": "arn:aws:" },
+            "sa-east-1"      : { "ARNPrefix": "arn:aws:" },
+            "cn-north-1"     : { "ARNPrefix": "arn:aws-cn:" },
+            "eu-central-1"   : { "ARNPrefix": "arn:aws:" }
+        },
+
         "AWSInfoRegionMap": {
             "ap-northeast-1": {
                 "Partition": "aws",
@@ -98,6 +136,10 @@
                 "Partition": "aws",
                 "QuickStartS3URL": "https://s3.amazonaws.com"
             },
+            "us-east-2": {
+                "Partition": "aws",
+                "QuickStartS3URL": "https://s3.amazonaws.com"
+            },
             "us-gov-west-1": {
                 "Partition": "aws-us-gov",
                 "QuickStartS3URL": "https://s3-us-gov-west-1.amazonaws.com"
@@ -113,24 +155,44 @@
         },
         "SoftwareMap": {
             "url" : {
-                "teradici": "https://dl.dropbox.com/sh/a6mjoxkb03gnghf/AADmNMMpIWQMOMSogX8ERI2ja/PCoIP_agent_release_installer_2.5.1.908_graphics.exe?dl=1",
-                "nvidia": "http://us.download.nvidia.com/Windows/Quadro_Certified/369.26/369.26-quadro-tesla-grid-winserv2008-2008r2-2012-64bit-international-whql.exe"
+                "nvidia2008r2": "http://us.download.nvidia.com/Windows/Quadro_Certified/362.56/362.56-quadro-tesla-grid-winserv2008-2008r2-2012-64bit-international-whql.exe",
+                "teradici2008r2": "https://www.dropbox.com/s/ily0pzhn855y2zs/PCoIP_agent_release_installer_2.7.0.4060_graphics.exe?dl=1",
+
+                "nvidiaWin10" : "http://us.download.nvidia.com/Windows/Quadro_Certified/362.56/362.56-quadro-grid-desktop-notebook-win10-64bit-international-whql.exe",
+                "teradiciWin10v2dot5": "https://dl.dropbox.com/sh/a6mjoxkb03gnghf/AADmNMMpIWQMOMSogX8ERI2ja/PCoIP_agent_release_installer_2.5.1.908_graphics.exe?dl=1",
+                "teradiciWin10": "https://www.dropbox.com/s/ily0pzhn855y2zs/PCoIP_agent_release_installer_2.7.0.4060_graphics.exe?dl=1"
             }
         },
-        "WindowsAMIMap": {
-            "us-east-1": { "windowsServer2008r2": "ami-98c1a28f" },
-            "us-west-1": { "windowsServer2008r2": "" },
-            "us-west-2": { "windowsServer2008r2": "" },
-            "eu-west-1": { "windowsServer2008r2": "" },
-            "sa-east-1": { "windowsServer2008r2": "" },
-            "ap-southeast-1": { "windowsServer2008r2": "" },
-            "ap-southeast-2": { "windowsServer2008r2": "" },
-            "ap-northeast-1": { "windowsServer2008r2": "" }
+        "Windows2008R2AMIMap": {
+            "us-east-1": { "winami": "ami-6a49477d" },
+            "us-east-2": { "winami": "xx no gpus xx" },
+            "us-west-1": { "winami": "ami-fb2a789b" },
+            "us-west-2": { "winami": "ami-6b9f200b" },
+            "eu-west-1": { "winami": "ami-36a9f450" },
+            "eu-central-1": { "winami": "ami-c4e629ab" },
+            "sa-east-1": { "winami": "" },
+            "ap-southeast-1": { "winami": "" },
+            "ap-southeast-2": { "winami": "" },
+            "ap-northeast-1": { "winami": "" }
+        },
+        "Windows10AMIMap": {
+            "us-east-1": { "winami": "ami-188d6e0e" },
+            "us-east-2": { "winami": "xx no gpus xx" },
+            "us-west-1": { "winami": "ami-179ac977" },
+            "us-west-2": { "winami": "ami-6e833e0e" },
+            "eu-west-1": { "winami": "ami-29f7dd5a" },
+            "eu-central-1": { "winami": "ami-88ec20e7" },
+            "sa-east-1": { "winami": "" },
+            "ap-southeast-1": { "winami": "" },
+            "ap-southeast-2": { "winami": "" },
+            "ap-northeast-1": { "winami": "" }
         }
 
 
     },
     "Resources": {
+
+
         "VPCStack": {
             "Type": "AWS::CloudFormation::Stack",
             "Properties": {
@@ -189,6 +251,15 @@
                 }
             }
         },
+
+
+        "CloudFormationLogs": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+                "RetentionInDays": 7
+            }
+        },
+
         "IamRole": {
             "Type": "AWS::IAM::Role",
             "Properties": {
@@ -256,7 +327,7 @@
                 ],
                 "InstanceType": {"Ref": "InstanceType"},
                 "IamInstanceProfile": {"Ref": "IAMInstanceProfile"},
-                "ImageId": { "Fn::FindInMap" : [ "WindowsAMIMap", { "Ref" : "AWS::Region" }, "windowsServer2008r2" ]},
+                "ImageId": { "Fn::FindInMap" : [ "Windows10AMIMap", { "Ref" : "AWS::Region" }, "winami" ]},
                 "Tags": [
                     {
                         "Key": "Name",
@@ -289,8 +360,11 @@
                 "AWS::CloudFormation::Init": {
                     "config" : {
                         "files": {
-                            "c:\\Users\\Administrator\\Downloads\\PCoIP_agent_release_installer_2.5.1.908_graphics.exe": {
-                                "source":  {"Fn::FindInMap" : [ "SoftwareMap", "url", "teradici" ]}
+                            "c:\\Users\\Administrator\\Downloads\\PCoIP_agent_release_installer_2.7.0.4060_graphics.exe": {
+                                "source":  {"Fn::FindInMap" : [ "SoftwareMap", "url", "teradiciWin10" ]}
+                            },
+                            "c:\\Users\\Administrator\\Downloads\\362.56-quadro-grid-desktop-notebook-win10-64bit-international-whql.exe": {
+                                "source":  {"Fn::FindInMap" : [ "SoftwareMap", "url", "nvidiaWin10" ]}
                             },
                             "c:\\Users\\Administrator\\Downloads\\install-video-editor.ps1": {
                                 "source": {
@@ -315,10 +389,8 @@
                                             "scripts/install-video-editor.ps1"
                                         ]
                                     ] }
-                            },
-                            "c:\\Users\\Administrator\\Downloads\\369.26-quadro-tesla-grid-winserv2008-2008r2-2012-64bit-international-whql.exe": {
-                                "source":  {"Fn::FindInMap" : [ "SoftwareMap", "url", "nvidia" ]}
                             }
+
                         },
                         "commands": {
                             "01-install": {
@@ -347,8 +419,25 @@
                         "FromPort": "3389",
                         "ToPort": "3389",
                         "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "443",
+                        "ToPort": "443",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "udp",
+                        "FromPort": "4172",
+                        "ToPort": "4172",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "4172",
+                        "ToPort": "4172",
+                        "CidrIp": "0.0.0.0/0"
                     }
-
                 ],
                 "VpcId": { "Fn::GetAtt": [ "VPCStack", "Outputs.VPCID" ] }
             }
