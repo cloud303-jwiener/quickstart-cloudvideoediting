@@ -1,20 +1,15 @@
 [
     {
         "ParameterKey": "AvailabilityZones",
-        "ParameterValue": "$[alfred_genaz_2]"
+        "ParameterValue": "us-east-1a, us-east-1d"
     },
-    {
-        "ParameterKey": "DomainAdminPassword",
-        "ParameterValue": "$[alfred_genpass_32]"
-    },
-
     {
         "ParameterKey": "InstanceType",
         "ParameterValue": "g2.2xlarge"
     },
     {
         "ParameterKey": "KeyPairName",
-        "ParameterValue": "cikey"
+        "ParameterValue": "mark-internal"
     },
     {
         "ParameterKey": "PrivateSubnet1CIDR",

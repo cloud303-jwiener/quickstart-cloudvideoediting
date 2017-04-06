@@ -153,16 +153,6 @@
                 "QuickStartS3URL": "https://s3.amazonaws.com"
             }
         },
-        "SoftwareMap": {
-            "url" : {
-                "nvidia2008r2": "http://us.download.nvidia.com/Windows/Quadro_Certified/362.56/362.56-quadro-tesla-grid-winserv2008-2008r2-2012-64bit-international-whql.exe",
-                "teradici2008r2": "https://www.dropbox.com/s/ily0pzhn855y2zs/PCoIP_agent_release_installer_2.7.0.4060_graphics.exe?dl=1",
-
-                "nvidiaWin10" : "http://us.download.nvidia.com/Windows/Quadro_Certified/362.56/362.56-quadro-grid-desktop-notebook-win10-64bit-international-whql.exe",
-                "teradiciWin10v2dot5": "https://dl.dropbox.com/sh/a6mjoxkb03gnghf/AADmNMMpIWQMOMSogX8ERI2ja/PCoIP_agent_release_installer_2.5.1.908_graphics.exe?dl=1",
-                "teradiciWin10": "https://www.dropbox.com/s/ily0pzhn855y2zs/PCoIP_agent_release_installer_2.7.0.4060_graphics.exe?dl=1"
-            }
-        },
         "Windows2008R2AMIMap": {
             "us-east-1": { "winami": "ami-6a49477d" },
             "us-east-2": { "winami": "xx no gpus xx" },
@@ -175,7 +165,7 @@
             "ap-southeast-2": { "winami": "" },
             "ap-northeast-1": { "winami": "" }
         },
-        "Windows10AMIMap": {
+        "Windows2016AMIMap": {
             "us-east-1": { "winami": "ami-188d6e0e" },
             "us-east-2": { "winami": "xx no gpus xx" },
             "us-west-1": { "winami": "ami-179ac977" },
@@ -327,7 +317,7 @@
                 ],
                 "InstanceType": {"Ref": "InstanceType"},
                 "IamInstanceProfile": {"Ref": "IAMInstanceProfile"},
-                "ImageId": { "Fn::FindInMap" : [ "Windows10AMIMap", { "Ref" : "AWS::Region" }, "winami" ]},
+                "ImageId": { "Fn::FindInMap" : [ "Windows2016AMIMap", { "Ref" : "AWS::Region" }, "winami" ]},
                 "Tags": [
                     {
                         "Key": "Name",
@@ -344,7 +334,7 @@
                 "KeyName": { "Ref": "KeyPairName" },
                 "UserData" : { "Fn::Base64" : { "Fn::Join" : ["", [
                     "<script>\n",
-                    "cfn-init.exe -v -s ", { "Ref" : "AWS::StackName" },
+                    "cfn-init.exe -v -c config -s ", { "Ref" : "AWS::StackName" },
                     " -r MyInstance",
                     " --region ", { "Ref" : "AWS::Region" }, "\n",
                     "</script>\n"
@@ -358,14 +348,152 @@
             },
             "Metadata": {
                 "AWS::CloudFormation::Init": {
-                    "config" : {
+                    "configSets": {
+                        "config": [
+                            "setup",
+                            "config-video-editor"
+                        ]
+                    },
+                    "setup": {
                         "files": {
-                            "c:\\Users\\Administrator\\Downloads\\PCoIP_agent_release_installer_2.7.0.4060_graphics.exe": {
-                                "source":  {"Fn::FindInMap" : [ "SoftwareMap", "url", "teradiciWin10" ]}
+                            "c:\\cfn\\cfn-hup.conf": {
+                                "content": {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            "[main]\n",
+                                            "stack=",
+                                            {
+                                                "Ref": "AWS::StackName"
+                                            },
+                                            "\n",
+                                            "region=",
+                                            {
+                                                "Ref": "AWS::Region"
+                                            },
+                                            "\n"
+                                        ]
+                                    ]
+                                }
                             },
-                            "c:\\Users\\Administrator\\Downloads\\362.56-quadro-grid-desktop-notebook-win10-64bit-international-whql.exe": {
-                                "source":  {"Fn::FindInMap" : [ "SoftwareMap", "url", "nvidiaWin10" ]}
+                            "c:\\cfn\\hooks.d\\cfn-auto-reloader.conf": {
+                                "content": {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            "[cfn-auto-reloader-hook]\n",
+                                            "triggers=post.update\n",
+                                            "path=Resources.MyInstance.Metadata.AWS::CloudFormation::Init\n",
+                                            "action=cfn-init.exe -v -c config -s ",
+                                            {
+                                                "Ref": "AWS::StackId"
+                                            },
+                                            " -r MyInstance",
+                                            " --region ",
+                                            {
+                                                "Ref": "AWS::Region"
+                                            },
+                                            "\n"
+                                        ]
+                                    ]
+                                }
                             },
+                            "C:\\cfn\\scripts\\Unzip-Archive.ps1": {
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "submodules/quickstart-microsoft-utilities/scripts/Unzip-Archive.ps1"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "C:\\cfn\\modules\\AWSQuickStart.zip": {
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "submodules/quickstart-microsoft-utilities/modules/AWSQuickStart.zip"
+                                        ]
+                                    ]
+                                }
+                            }
+                        },
+                        "services": {
+                            "windows": {
+                                "cfn-hup": {
+                                    "enabled": "true",
+                                    "ensureRunning": "true",
+                                    "files": [
+                                        "c:\\cfn\\cfn-hup.conf",
+                                        "c:\\cfn\\hooks.d\\cfn-auto-reloader.conf"
+                                    ]
+                                }
+                            }
+                        },
+                        "commands": {
+                            "a-set-execution-policy": {
+                                "command": "powershell.exe -Command \"Set-ExecutionPolicy RemoteSigned -Force\"",
+                                "waitAfterCompletion": "0"
+                            },
+                            "b-unpack-quickstart-module": {
+                                "command": "powershell.exe -Command C:\\cfn\\scripts\\Unzip-Archive.ps1 -Source C:\\cfn\\modules\\AWSQuickStart.zip -Destination C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules\\",
+                                "waitAfterCompletion": "0"
+                            },
+                            "c-init-quickstart-module": {
+                                "command": {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            "powershell.exe -Command \"",
+                                            "New-AWSQuickStartResourceSignal -Stack '",
+                                            {
+                                                "Ref": "AWS::StackName"
+                                            },
+                                            "' -Resource 'MyInstance' -Region '",
+                                            {
+                                                "Ref": "AWS::Region"
+                                            },
+                                            "'\""
+                                        ]
+                                    ]
+                                },
+                                "waitAfterCompletion": "0"
+                            }
+                        }
+                    },
+                    "config-video-editor" : {
+                        "files": {
                             "c:\\Users\\Administrator\\Downloads\\install-video-editor.ps1": {
                                 "source": {
                                     "Fn::Join" :  [
@@ -389,17 +517,109 @@
                                             "scripts/install-video-editor.ps1"
                                         ]
                                     ] }
+                            },
+                            "c:\\Users\\Administrator\\Downloads\\install-teradici.ps1": {
+                                "source": {
+                                    "Fn::Join" :  [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/install-teradici.ps1"
+                                        ]
+                                    ] }
+                            },
+                            "c:\\Users\\Administrator\\Downloads\\install-gpu-drivers.ps1": {
+                                "source": {
+                                    "Fn::Join" :  [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/install-gpu-drivers.ps1"
+                                        ]
+                                    ] }
+                            },
+                            "c:\\Users\\Administrator\\Downloads\\show-reboots.ps1": {
+                                "source": {
+                                    "Fn::Join" :  [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/show-reboots.ps1"
+                                        ]
+                                    ] }
                             }
 
                         },
                         "commands": {
-                            "01-install": {
+                            "01-install-video-editor": {
                                 "command": {
                                     "Fn::Join": [
                                         "",
                                         [
-                                            "powershell.exe -ExecutionPolicy Unrestricted C:\\Users\\Administrator\\Downloads\\install-video-editor.ps1 -stack \"",
-                                            { "Ref": "AWS::StackName" }, "\" -resource \"MyInstance\""
+                                            "powershell.exe -ExecutionPolicy Unrestricted C:\\Users\\Administrator\\Downloads\\install-video-editor.ps1"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "02-install-gpu-drivers": {
+                                "command": {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            "powershell.exe -ExecutionPolicy Unrestricted C:\\Users\\Administrator\\Downloads\\install-gpu-drivers.ps1 -WinVersion windows2016 -verbose"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "03-install-teradici": {
+                                "command": {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            "powershell.exe -ExecutionPolicy Unrestricted C:\\Users\\Administrator\\Downloads\\install-teradici.ps1 ",
+                                            "-stack \"", { "Ref": "AWS::StackName" }, "\" -resource \"MyInstance\" -verbose"
                                         ]
                                     ]
                                 }
