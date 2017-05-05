@@ -4,28 +4,24 @@
         "ParameterValue": "us-east-1a, us-east-1d"
     },
     {
+        "ParameterKey": "DMZ1CIDR",
+        "ParameterValue": "10.0.32.0/19"
+    },
+    {
+        "ParameterKey": "DMZ2CIDR",
+        "ParameterValue": "10.0.128.0/20"
+    },
+    {
+        "ParameterKey": "DomainAdminPassword",
+        "ParameterValue": "AdminAWS17"
+    },
+    {
         "ParameterKey": "InstanceType",
-        "ParameterValue": "g2.2xlarge"
+        "ParameterValue": "g2.8xlarge"
     },
     {
         "ParameterKey": "KeyPairName",
         "ParameterValue": "mark-internal"
-    },
-    {
-        "ParameterKey": "PrivateSubnet1CIDR",
-        "ParameterValue": "10.0.0.0/19"
-    },
-    {
-        "ParameterKey": "PrivateSubnet2CIDR",
-        "ParameterValue": "10.0.32.0/19"
-    },
-    {
-        "ParameterKey": "PublicSubnet1CIDR",
-        "ParameterValue": "10.0.128.0/20"
-    },
-    {
-        "ParameterKey": "PublicSubnet2CIDR",
-        "ParameterValue": "10.0.144.0/20"
     },
     {
         "ParameterKey": "QSS3BucketName",
@@ -36,8 +32,11 @@
         "ParameterValue": "videoediting"
     },
     {
+        "ParameterKey": "RestoreModePassword",
+        "ParameterValue": "Test2017A$"
+    },
+    {
         "ParameterKey": "VPCCIDR",
         "ParameterValue": "10.0.0.0/16"
     }
-
 ]
