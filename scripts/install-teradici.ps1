@@ -4,7 +4,7 @@ param(
     [string]$Source = 'https://www.dropbox.com/s/ily0pzhn855y2zs/PCoIP_agent_release_installer_2.7.0.4060_graphics.exe?dl=1',
 
     [Parameter(Mandatory=$false)]
-    [string]$Destination = 'C:\cfn\downloads\PCoIP_agent_release_installer_2.5.1.908_graphics.exe',
+    [string]$Destination = 'C:\cfn\downloads\PCoIP_agent_release_installer_2.7.0.4060_graphics.exe',
 
     [string]$stack,
 
@@ -63,7 +63,7 @@ try {
        $pinfo.RedirectStandardError = $true
        $pinfo.RedirectStandardOutput = $true
        $pinfo.UseShellExecute = $false
-       $pinfo.Arguments = "/S /nodeskside"
+       $pinfo.Arguments = "/S /nodeskside /NoPostReboot"
        $p = New-Object System.Diagnostics.Process
        $p.StartInfo = $pinfo
        $p.Start()
