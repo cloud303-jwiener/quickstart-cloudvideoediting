@@ -1,44 +1,200 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
     "Description": "This template deploys the Cloud Video Editing Quick Start. **WARNING** This template creates Amazon EC2 Windows instance and related resources. You will be billed for the AWS resources used if you create a stack from this template.",
+    "Metadata": {
+        "AWS::CloudFormation::Interface": {
+            "ParameterGroups": [
+                {
+                    "Label": {
+                        "default": "Network Configuration"
+                    },
+                    "Parameters": [
+                        "AvailabilityZones",
+                        "VPCCIDR",
+                        "PrivateSubnet1CIDR",
+                        "PrivateSubnet2CIDR",
+                        "PublicSubnet1CIDR",
+                        "PublicSubnet2CIDR",
+                        "RDGWCIDR"
+                    ]
+                },
+                {
+                    "Label": {
+                        "default": "Amazon EC2 Configuration"
+                    },
+                    "Parameters": [
+                        "KeyPairName",
+                        "ADServer1InstanceType",
+                        "ADServer1NetBIOSName",
+                        "ADServer1PrivateIP",
+                        "ADServer2InstanceType",
+                        "ADServer2NetBIOSName",
+                        "ADServer2PrivateIP",
+                        "RDGWInstanceType",
+                        "WAPADFSInstanceType"
+                    ]
+                },
+                {
+                    "Label": {
+                        "default": "Microsoft Active Directory Configuration"
+                    },
+                    "Parameters": [
+                        "DomainDNSName",
+                        "DomainNetBIOSName",
+                        "RestoreModePassword",
+                        "DomainAdminUser",
+                        "DomainAdminPassword"
+                    ]
+                },
+                {
+                    "Label": {
+                        "default": "Microsoft Remote Desktop Gateway Configuration"
+                    },
+                    "Parameters": [
+                        "NumberOfRDGWHosts"
+                    ]
+                },
+                {
+                    "Label": {
+                        "default": "AWS Quick Start Configuration"
+                    },
+                    "Parameters": [
+                        "QSS3BucketName",
+                        "QSS3KeyPrefix"
+                    ]
+                }
+            ],
+            "ParameterLabels": {
+                "ADServer1InstanceType": {
+                    "default": "Domain Controller 1 Instance Type"
+                },
+                "ADServer1NetBIOSName": {
+                    "default": "Domain Controller 1 NetBIOS Name"
+                },
+                "ADServer1PrivateIP": {
+                    "default": "Domain Controller 1 Private IP Address"
+                },
+                "ADServer2InstanceType": {
+                    "default": "Domain Controller 2 Instance Type"
+                },
+                "ADServer2NetBIOSName": {
+                    "default": "Domain Controller 2 NetBIOS Name"
+                },
+                "ADServer2PrivateIP": {
+                    "default": "Domain Controller 2 Private IP Address"
+                },
+                "AvailabilityZones": {
+                    "default": "Availability Zones"
+                },
+                "DomainAdminPassword": {
+                    "default": "Domain Admin Password"
+                },
+                "DomainAdminUser": {
+                    "default": "Domain Admin User Name"
+                },
+                "DomainDNSName": {
+                    "default": "Domain DNS Name"
+                },
+                "DomainNetBIOSName": {
+                    "default": "Domain NetBIOS Name"
+                },
+                "KeyPairName": {
+                    "default": "Key Pair Name"
+                },
+                "PrivateSubnet1CIDR": {
+                    "default": "Private Subnet 1 CIDR"
+                },
+                "PrivateSubnet2CIDR": {
+                    "default": "Private Subnet 2 CIDR"
+                },
+                "PublicSubnet1CIDR": {
+                    "default": "Public Subnet 1 CIDR"
+                },
+                "PublicSubnet2CIDR": {
+                    "default": "Public Subnet 2 CIDR"
+                },
+                "QSS3BucketName": {
+                    "default": "Quick Start S3 Bucket Name"
+                },
+                "QSS3KeyPrefix": {
+                    "default": "Quick Start S3 Key Prefix"
+                },
+                "RDGWCIDR": {
+                    "default": "Allowed Remote Desktop Gateway External Access CIDR"
+                },
+                "RDGWInstanceType": {
+                    "default": "Remote Desktop Gateway Instance Type"
+                },
+                "RestoreModePassword": {
+                    "default": "Restore Mode Password"
+                },
+                "VPCCIDR": {
+                    "default": "VPC CIDR"
+                },
+                "WAPADFSInstanceType": {
+                    "default": "WAP and ADFS Server Instance Type"
+                }
+            }
+        }
+    },
     "Parameters": {
-        "ADInstanceType": {
-            "Description": "Amazon EC2 instance type for the first Active Directory Instance",
-            "Type": "String",
-            "Default": "m4.xlarge",
+        "ADServer1InstanceType": {
             "AllowedValues": [
+                "t2.large",
+                "m3.large",
+                "m3.xlarge",
+                "m3.2xlarge",
                 "m4.large",
                 "m4.xlarge",
                 "m4.2xlarge",
                 "m4.4xlarge"
-            ]
-        },
-        "AD2InstanceType": {
-            "Description": "Amazon EC2 instance type for the second Active Directory Instance",
-            "Type": "String",
+            ],
             "Default": "m4.xlarge",
-            "AllowedValues": [
-                "m4.large",
-                "m4.xlarge",
-                "m4.2xlarge",
-                "m4.4xlarge"
-            ]
+            "Description": "Amazon EC2 instance type for the first Active Directory instance",
+            "Type": "String"
         },
-        "ADServerNetBIOSName1": {
-            "Description": "NetBIOS name of the 1st AD Server (upto 15 characters)",
-            "Type": "String",
+        "ADServer1NetBIOSName": {
+            "AllowedPattern": "[a-zA-Z0-9]+",
             "Default": "DC1",
-            "MinLength": "1",
+            "Description": "NetBIOS name of the first Active Directory server (up to 15 characters)",
             "MaxLength": "15",
-            "AllowedPattern": "[a-zA-Z0-9]+"
+            "MinLength": "1",
+            "Type": "String"
         },
-        "ADServerNetBIOSName2": {
-            "Description": "NetBIOS name of the 2nd AD Server (upto 15 characters)",
-            "Type": "String",
+        "ADServer1PrivateIP": {
+            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$",
+            "Default": "10.0.0.10",
+            "Description": "Fixed private IP for the first Active Directory server located in Availability Zone 1",
+            "Type": "String"
+        },
+        "ADServer2InstanceType": {
+            "AllowedValues": [
+                "t2.large",
+                "m3.large",
+                "m3.xlarge",
+                "m3.2xlarge",
+                "m4.large",
+                "m4.xlarge",
+                "m4.2xlarge",
+                "m4.4xlarge"
+            ],
+            "Default": "m4.xlarge",
+            "Description": "Amazon EC2 instance type for the second Active Directory instance",
+            "Type": "String"
+        },
+        "ADServer2NetBIOSName": {
+            "AllowedPattern": "[a-zA-Z0-9]+",
             "Default": "DC2",
-            "MinLength": "1",
+            "Description": "NetBIOS name of the second Active Directory server (up to 15 characters)",
             "MaxLength": "15",
-            "AllowedPattern": "[a-zA-Z0-9]+"
+            "MinLength": "1",
+            "Type": "String"
+        },
+        "ADServer2PrivateIP": {
+            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$",
+            "Default": "10.0.32.10",
+            "Description": "Fixed private IP for the second Active Directory server located in Availability Zone 2",
+            "Type": "String"
         },
         "AvailabilityZones": {
             "Description": "List of Availability Zones to use for the subnets in the VPC. Note: The logical order is preserved and only 2 AZs are used for this deployment.",
@@ -76,68 +232,83 @@
             "MinLength": "1",
             "Type": "String"
         },
-        "DMZ1CIDR": {
-            "Description": "CIDR Block for the Public DMZ Subnet located in AZ1",
-            "Type": "String",
-            "Default": "10.0.32.0/20",
-            "AllowedPattern": "[a-zA-Z0-9]+\\..+"
-        },
-        "DMZ2CIDR": {
-            "Description": "CIDR Block for the Public DMZ Subnet located in AZ2",
-            "Type": "String",
-            "Default": "10.0.96.0/20",
-            "AllowedPattern": "[a-zA-Z0-9]+\\..+"
-        },
-        "InstanceType": {
-            "Type": "String",
-            "Description": "Which GPU instance type are we using?",
-            "Default": "g2.8xlarge"
-        },
         "KeyPairName": {
             "Description": "Public/private key pairs allow you to securely connect to your instance after it launches",
             "Type": "AWS::EC2::KeyPair::KeyName"
         },
-        "NATInstanceType": {
-            "Description": "Amazon EC2 instance type for the NAT Instances",
-            "Type": "String",
-            "Default": "t2.small",
+        "NumberOfRDGWHosts": {
             "AllowedValues": [
-                "t2.small",
-                "t2.medium"
-            ]
+                "1",
+                "2",
+                "3",
+                "4"
+            ],
+            "Default": "1",
+            "Description": "Enter the number of Remote Desktop Gateway hosts to create",
+            "Type": "String"
         },
-        "PrivSub1CIDR": {
-            "Description": "CIDR block for the AD Server tier located in AZ1.",
-            "Type": "String",
+        "PrivateSubnet1CIDR": {
+            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
+            "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
             "Default": "10.0.0.0/19",
-            "AllowedPattern": "[a-zA-Z0-9]+\\..+"
+            "Description": "CIDR block for private subnet 1 located in Availability Zone 1.",
+            "Type": "String"
         },
-        "PrivSub2CIDR": {
-            "Description": "CIDR block for the AD Server tier located in AZ2.",
-            "Type": "String",
-            "Default": "10.0.64.0/19",
-            "AllowedPattern": "[a-zA-Z0-9]+\\..+"
+        "PrivateSubnet2CIDR": {
+            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
+            "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
+            "Default": "10.0.32.0/19",
+            "Description": "CIDR block for private subnet 2 located in Availability Zone 2.",
+            "Type": "String"
         },
         "PublicSubnet1CIDR": {
-            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$",
+            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
+            "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
             "Default": "10.0.128.0/20",
             "Description": "CIDR Block for the public DMZ subnet 1 located in Availability Zone 1",
             "Type": "String"
         },
         "PublicSubnet2CIDR": {
-            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$",
+            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
+            "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
             "Default": "10.0.144.0/20",
             "Description": "CIDR Block for the public DMZ subnet 2 located in Availability Zone 2",
             "Type": "String"
         },
-
         "QSS3BucketName": {
-            "Type": "String",
-            "Default": "mark-teradici-share"
+            "AllowedPattern": "^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$",
+            "ConstraintDescription": "Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).",
+            "Default": "quickstart-reference",
+            "Description": "S3 bucket name for the Quick Start assets. Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).",
+            "Type": "String"
         },
         "QSS3KeyPrefix": {
+            "AllowedPattern": "^[0-9a-zA-Z-/]*$",
+            "ConstraintDescription": "Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).",
+            "Default": "cloudvideoediting/latest/",
+            "Description": "S3 key prefix for the Quick Start assets. Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).",
+            "Type": "String"
+        },
+        "RDGWCIDR": {
+            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$",
+            "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/x",
+            "Description": "Allowed CIDR Block for external access to the Remote Desktop Gateways",
+            "Type": "String"
+        },
+        "RDGWInstanceType": {
+            "Description": "Amazon EC2 instance type for the Remote Desktop Gateway instances",
             "Type": "String",
-            "Default": "edit-quickstart"
+            "Default": "t2.large",
+            "AllowedValues": [
+                "t2.large",
+                "m3.large",
+                "m3.xlarge",
+                "m3.2xlarge",
+                "m4.large",
+                "m4.xlarge",
+                "m4.2xlarge",
+                "m4.4xlarge"
+            ]
         },
         "RestoreModePassword": {
             "AllowedPattern": "(?=^.{6,255}$)((?=.*\\d)(?=.*[A-Z])(?=.*[a-z])|(?=.*\\d)(?=.*[^A-Za-z0-9])(?=.*[a-z])|(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])|(?=.*\\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]))^.*",
@@ -147,149 +318,21 @@
             "NoEcho": "True",
             "Type": "String"
         },
-        "RDGWInstanceType": {
-            "Description": "Amazon EC2 instance type for the Remote Desktop Gatweway Instance",
-            "Type": "String",
-            "Default": "m4.xlarge",
-            "AllowedValues": [
-                "m4.large",
-                "m4.xlarge",
-                "m4.2xlarge",
-                "m4.4xlarge"
-            ]
-        },
-        "StackTimeout": {
-            "Type": "String",
-            "Description": "Amount of time we wait before failing the stack",
-            "Default": "PT45M"
-        },
-        "UserCount": {
-            "Description": "Total number of test user accounts to create in Active Directory",
-            "Type": "Number",
-            "Default": "25"
-        },
         "VPCCIDR": {
-            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$",
+            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
+            "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
             "Default": "10.0.0.0/16",
             "Description": "CIDR Block for the VPC",
             "Type": "String"
-        }
-    },
-    "Mappings": {
-
-        "Region2Principal" : {
-            "us-east-1"      : { "EC2Principal" : "ec2.amazonaws.com", "OpsWorksPrincipal" : "opsworks.amazonaws.com" },
-            "us-west-2"      : { "EC2Principal" : "ec2.amazonaws.com", "OpsWorksPrincipal" : "opsworks.amazonaws.com" },
-            "us-west-1"      : { "EC2Principal" : "ec2.amazonaws.com", "OpsWorksPrincipal" : "opsworks.amazonaws.com" },
-            "eu-west-1"      : { "EC2Principal" : "ec2.amazonaws.com", "OpsWorksPrincipal" : "opsworks.amazonaws.com" },
-            "eu-west-2"      : { "EC2Principal" : "ec2.amazonaws.com", "OpsWorksPrincipal" : "opsworks.amazonaws.com" },
-            "ap-southeast-1" : { "EC2Principal" : "ec2.amazonaws.com", "OpsWorksPrincipal" : "opsworks.amazonaws.com" },
-            "ap-northeast-1" : { "EC2Principal" : "ec2.amazonaws.com", "OpsWorksPrincipal" : "opsworks.amazonaws.com" },
-            "ap-northeast-2" : { "EC2Principal" : "ec2.amazonaws.com", "OpsWorksPrincipal" : "opsworks.amazonaws.com" },
-            "ap-southeast-2" : { "EC2Principal" : "ec2.amazonaws.com", "OpsWorksPrincipal" : "opsworks.amazonaws.com" },
-            "ap-south-1"     : { "EC2Principal" : "ec2.amazonaws.com", "OpsWorksPrincipal" : "opsworks.amazonaws.com" },
-            "us-east-2"      : { "EC2Principal" : "ec2.amazonaws.com", "OpsWorksPrincipal" : "opsworks.amazonaws.com" },
-            "ca-central-1"   : { "EC2Principal" : "ec2.amazonaws.com", "OpsWorksPrincipal" : "opsworks.amazonaws.com" },
-            "sa-east-1"      : { "EC2Principal" : "ec2.amazonaws.com", "OpsWorksPrincipal" : "opsworks.amazonaws.com" },
-            "cn-north-1"     : { "EC2Principal" : "ec2.amazonaws.com.cn", "OpsWorksPrincipal" : "opsworks.amazonaws.com.cn" },
-            "eu-central-1"   : { "EC2Principal" : "ec2.amazonaws.com", "OpsWorksPrincipal" : "opsworks.amazonaws.com" }
         },
-
-        "Region2ARNPrefix": {
-            "us-east-1"      : { "ARNPrefix": "arn:aws:" },
-            "us-west-1"      : { "ARNPrefix": "arn:aws:" },
-            "us-west-2"      : { "ARNPrefix": "arn:aws:" },
-            "eu-west-1"      : { "ARNPrefix": "arn:aws:" },
-            "eu-west-2"      : { "ARNPrefix": "arn:aws:" },
-            "ap-northeast-1" : { "ARNPrefix": "arn:aws:" },
-            "ap-northeast-2" : { "ARNPrefix": "arn:aws:" },
-            "ap-southeast-1" : { "ARNPrefix": "arn:aws:" },
-            "ap-southeast-2" : { "ARNPrefix": "arn:aws:" },
-            "ap-south-1"     : { "ARNPrefix": "arn:aws:" },
-            "us-east-2"      : { "ARNPrefix": "arn:aws:" },
-            "ca-central-1"   : { "ARNPrefix": "arn:aws:" },
-            "sa-east-1"      : { "ARNPrefix": "arn:aws:" },
-            "cn-north-1"     : { "ARNPrefix": "arn:aws-cn:" },
-            "eu-central-1"   : { "ARNPrefix": "arn:aws:" }
-        },
-
-        "AWSInfoRegionMap": {
-            "ap-northeast-1": {
-                "Partition": "aws",
-                "QuickStartS3URL": "https://s3.amazonaws.com"
-            },
-            "ap-northeast-2": {
-                "Partition": "aws",
-                "QuickStartS3URL": "https://s3.amazonaws.com"
-            },
-            "ap-south-1": {
-                "Partition": "aws",
-                "QuickStartS3URL": "https://s3.amazonaws.com"
-            },
-            "ap-southeast-1": {
-                "Partition": "aws",
-                "QuickStartS3URL": "https://s3.amazonaws.com"
-            },
-            "ap-southeast-2": {
-                "Partition": "aws",
-                "QuickStartS3URL": "https://s3.amazonaws.com"
-            },
-            "eu-central-1": {
-                "Partition": "aws",
-                "QuickStartS3URL": "https://s3.amazonaws.com"
-            },
-            "eu-west-1": {
-                "Partition": "aws",
-                "QuickStartS3URL": "https://s3.amazonaws.com"
-            },
-            "sa-east-1": {
-                "Partition": "aws",
-                "QuickStartS3URL": "https://s3.amazonaws.com"
-            },
-            "us-east-1": {
-                "Partition": "aws",
-                "QuickStartS3URL": "https://s3.amazonaws.com"
-            },
-            "us-east-2": {
-                "Partition": "aws",
-                "QuickStartS3URL": "https://s3.amazonaws.com"
-            },
-            "us-gov-west-1": {
-                "Partition": "aws-us-gov",
-                "QuickStartS3URL": "https://s3-us-gov-west-1.amazonaws.com"
-            },
-            "us-west-1": {
-                "Partition": "aws",
-                "QuickStartS3URL": "https://s3.amazonaws.com"
-            },
-            "us-west-2": {
-                "Partition": "aws",
-                "QuickStartS3URL": "https://s3.amazonaws.com"
-            }
-        },
-        "Windows2008R2AMIMap": {
-            "us-east-1": { "winami": "ami-6a49477d" },
-            "us-east-2": { "winami": "xx no gpus xx" },
-            "us-west-1": { "winami": "ami-fb2a789b" },
-            "us-west-2": { "winami": "ami-6b9f200b" },
-            "eu-west-1": { "winami": "ami-36a9f450" },
-            "eu-central-1": { "winami": "ami-c4e629ab" },
-            "sa-east-1": { "winami": "" },
-            "ap-southeast-1": { "winami": "" },
-            "ap-southeast-2": { "winami": "" },
-            "ap-northeast-1": { "winami": "" }
-        },
-        "Windows2016AMIMap": {
-            "us-east-1": { "winami": "ami-ef7cf4f9" },
-            "us-east-2": { "winami": "xx no gpus xx" },
-            "us-west-1": { "winami": "ami-179ac977" },
-            "us-west-2": { "winami": "ami-6e833e0e" },
-            "eu-west-1": { "winami": "ami-29f7dd5a" },
-            "eu-central-1": { "winami": "ami-88ec20e7" },
-            "sa-east-1": { "winami": "" },
-            "ap-southeast-1": { "winami": "" },
-            "ap-southeast-2": { "winami": "" },
-            "ap-northeast-1": { "winami": "" }
+        "WAPADFSInstanceType": {
+            "AllowedValues": [
+                "t2.large",
+                "c4.2xlarge"
+            ],
+            "Default": "c4.2xlarge",
+            "Description": "Amazon EC2 instance type for the WAP and ADFS Servers",
+            "Type": "String"
         }
     },
     "Resources": {
@@ -297,28 +340,7 @@
             "Type": "AWS::CloudFormation::Stack",
             "Properties": {
                 "TemplateURL": {
-                    "Fn::Join": [
-                        "/",
-                        [
-                            {
-                                "Fn::FindInMap": [
-                                    "AWSInfoRegionMap",
-                                    {
-                                        "Ref": "AWS::Region"
-                                    },
-                                    "QuickStartS3URL"
-                                ]
-                            },
-                            {
-                                "Ref": "QSS3BucketName"
-                            },
-                            {
-                                "Ref": "QSS3KeyPrefix"
-                            },
-                            "submodules/quickstart-aws-vpc",
-                            "templates/aws-vpc.template"
-                        ]
-                    ]
+                    "Fn::Sub": "https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}submodules/quickstart-aws-vpc/templates/aws-vpc.template"
                 },
                 "Parameters": {
                     "AvailabilityZones": {
@@ -334,10 +356,10 @@
                     },
                     "NumberOfAZs": "2",
                     "PrivateSubnet1ACIDR": {
-                        "Ref": "PrivSub1CIDR"
+                        "Ref": "PrivateSubnet1CIDR"
                     },
                     "PrivateSubnet2ACIDR": {
-                        "Ref": "PrivSub2CIDR"
+                        "Ref": "PrivateSubnet2CIDR"
                     },
                     "PublicSubnet1CIDR": {
                         "Ref": "PublicSubnet1CIDR"
@@ -355,25 +377,27 @@
             "DependsOn": "VPCStack",
             "Type": "AWS::CloudFormation::Stack",
             "Properties": {
-                "TemplateURL": "https://s3.amazonaws.com/quickstart-reference/microsoft/activedirectory/latest/templates/Template_1_AD_2012.template",
+                "TemplateURL": {
+                    "Fn::Sub": "https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}submodules/quickstart-microsoft-activedirectory/templates/ad-2012r2-1.template"
+                },
                 "Parameters": {
-                    "AD2InstanceType": {
-                        "Ref": "AD2InstanceType"
+                    "ADServer1InstanceType": {
+                        "Ref": "ADServer1InstanceType"
                     },
-                    "ADInstanceType": {
-                        "Ref": "ADInstanceType"
+                    "ADServer1NetBIOSName": {
+                        "Ref": "ADServer1NetBIOSName"
                     },
-                    "ADServerNetBIOSName1": {
-                        "Ref": "ADServerNetBIOSName1"
+                    "ADServer1PrivateIP": {
+                        "Ref": "ADServer1PrivateIP"
                     },
-                    "ADServerNetBIOSName2": {
-                        "Ref": "ADServerNetBIOSName2"
+                    "ADServer2InstanceType": {
+                        "Ref": "ADServer2InstanceType"
                     },
-                    "DMZ1CIDR": {
-                        "Ref": "DMZ1CIDR"
+                    "ADServer2NetBIOSName": {
+                        "Ref": "ADServer2NetBIOSName"
                     },
-                    "DMZ2CIDR": {
-                        "Ref": "DMZ2CIDR"
+                    "ADServer2PrivateIP": {
+                        "Ref": "ADServer2PrivateIP"
                     },
                     "DomainAdminPassword": {
                         "Ref": "DomainAdminPassword"
@@ -390,475 +414,200 @@
                     "KeyPairName": {
                         "Ref": "KeyPairName"
                     },
-                    "NATInstanceType": {
-                        "Ref": "NATInstanceType"
+                    "PrivateSubnet1CIDR": {
+                        "Ref": "PrivateSubnet1CIDR"
                     },
-                    "PrivSub1CIDR": {
-                        "Ref": "PrivSub1CIDR"
+                    "PrivateSubnet1ID": {
+                        "Fn::GetAtt": [
+                            "VPCStack",
+                            "Outputs.PrivateSubnet1AID"
+                        ]
                     },
-                    "PrivSub2CIDR": {
-                        "Ref": "PrivSub2CIDR"
+                    "PrivateSubnet2CIDR": {
+                        "Ref": "PrivateSubnet2CIDR"
                     },
-                    "RDGWInstanceType": {
-                        "Ref": "RDGWInstanceType"
+                    "PrivateSubnet2ID": {
+                        "Fn::GetAtt": [
+                            "VPCStack",
+                            "Outputs.PrivateSubnet2AID"
+                        ]
+                    },
+                    "PublicSubnet1CIDR": {
+                        "Ref": "PublicSubnet1CIDR"
+                    },
+                    "PublicSubnet2CIDR": {
+                        "Ref": "PublicSubnet2CIDR"
+                    },
+                    "QSS3BucketName": {
+                        "Ref": "QSS3BucketName"
+                    },
+                    "QSS3KeyPrefix": {
+                        "Fn::Sub": "${QSS3KeyPrefix}submodules/quickstart-microsoft-activedirectory/"
                     },
                     "RestoreModePassword": {
                         "Ref": "RestoreModePassword"
                     },
-                    "UserCount": {
-                        "Ref": "UserCount"
+                    "VPCCIDR": {
+                        "Ref": "VPCCIDR"
+                    },
+                    "VPCID": {
+                        "Fn::GetAtt": [
+                            "VPCStack",
+                            "Outputs.VPCID"
+                        ]
+                    }
+                }
+            }
+        },
+        "RDGWStack": {
+            "DependsOn": "ADStack",
+            "Type": "AWS::CloudFormation::Stack",
+            "Properties": {
+                "TemplateURL": {
+                    "Fn::Sub": "https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}submodules/quickstart-microsoft-rdgateway/templates/rdgw-domain.template"
+                },
+                "Parameters": {
+                    "DomainAdminPassword": {
+                        "Ref": "DomainAdminPassword"
+                    },
+                    "DomainAdminUser": {
+                        "Ref": "DomainAdminUser"
+                    },
+                    "DomainDNSName": {
+                        "Ref": "DomainDNSName"
+                    },
+                    "DomainMemberSGID": {
+                        "Fn::GetAtt": [
+                            "ADStack",
+                            "Outputs.DomainMemberSGID"
+                        ]
+                    },
+                    "DomainNetBIOSName": {
+                        "Ref": "DomainNetBIOSName"
+                    },
+                    "KeyPairName": {
+                        "Ref": "KeyPairName"
+                    },
+                    "NumberOfRDGWHosts": {
+                        "Ref": "NumberOfRDGWHosts"
+                    },
+                    "PublicSubnet1ID": {
+                        "Fn::GetAtt": [
+                            "VPCStack",
+                            "Outputs.PublicSubnet1ID"
+                        ]
+                    },
+                    "PublicSubnet2ID": {
+                        "Fn::GetAtt": [
+                            "VPCStack",
+                            "Outputs.PublicSubnet2ID"
+                        ]
+                    },
+                    "QSS3BucketName": {
+                        "Ref": "QSS3BucketName"
+                    },
+                    "QSS3KeyPrefix": {
+                        "Fn::Sub": "${QSS3KeyPrefix}submodules/quickstart-microsoft-rdgateway/"
+                    },
+                    "RDGWInstanceType": {
+                        "Ref": "RDGWInstanceType"
+                    },
+                    "RDGWCIDR": {
+                        "Ref": "RDGWCIDR"
+                    },
+                    "VPCID": {
+                        "Fn::GetAtt": [
+                            "VPCStack",
+                            "Outputs.VPCID"
+                        ]
+                    }
+                }
+            }
+        },
+        "CloudVideoEditingStack": {
+            "DependsOn": "ADStack",
+            "Type": "AWS::CloudFormation::Stack",
+            "Properties": {
+                "TemplateURL": {
+                    "Fn::Sub": "https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}templates/cloud-video-editing.template"
+                },
+                "Parameters": {
+                    "ADServer1NetBIOSName": {
+                        "Ref": "ADServer1NetBIOSName"
+                    },
+                    "ADServer1PrivateIP": {
+                        "Ref": "ADServer1PrivateIP"
+                    },
+                    "ADServer2NetBIOSName": {
+                        "Ref": "ADServer2NetBIOSName"
+                    },
+                    "ADServer2PrivateIP": {
+                        "Ref": "ADServer2PrivateIP"
+                    },
+                    "DomainAdminPassword": {
+                        "Ref": "DomainAdminPassword"
+                    },
+                    "DomainAdminUser": {
+                        "Ref": "DomainAdminUser"
+                    },
+                    "DomainDNSName": {
+                        "Ref": "DomainDNSName"
+                    },
+                    "DomainMemberSGID": {
+                        "Fn::GetAtt": [
+                            "ADStack",
+                            "Outputs.DomainMemberSGID"
+                        ]
+                    },
+                    "DomainNetBIOSName": {
+                        "Ref": "DomainNetBIOSName"
+                    },
+                    "KeyPairName": {
+                        "Ref": "KeyPairName"
+                    },
+                    "PrivateSubnet1ID": {
+                        "Fn::GetAtt": [
+                            "VPCStack",
+                            "Outputs.PrivateSubnet1AID"
+                        ]
+                    },
+                    "PrivateSubnet2ID": {
+                        "Fn::GetAtt": [
+                            "VPCStack",
+                            "Outputs.PrivateSubnet2AID"
+                        ]
+                    },
+                    "PublicSubnet1ID": {
+                        "Fn::GetAtt": [
+                            "VPCStack",
+                            "Outputs.PublicSubnet1ID"
+                        ]
+                    },
+                    "PublicSubnet2ID": {
+                        "Fn::GetAtt": [
+                            "VPCStack",
+                            "Outputs.PublicSubnet2ID"
+                        ]
+                    },
+                    "QSS3BucketName": {
+                        "Ref": "QSS3BucketName"
+                    },
+                    "QSS3KeyPrefix": {
+                        "Ref": "QSS3KeyPrefix"
                     },
                     "VPCCIDR": {
                         "Ref": "VPCCIDR"
-                    }
-                }
-            }
-        },
-        "IamRole": {
-            "Type": "AWS::IAM::Role",
-            "Properties": {
-                "AssumeRolePolicyDocument": {
-                    "Version" : "2012-10-17",
-                    "Statement": [ {
-                        "Effect": "Allow",
-                        "Principal": {
-                            "Service": [ "ec2.amazonaws.com" ]
-                        },
-                        "Action": [ "sts:AssumeRole" ]
-                    } ]
-                },
-                "Path": "/",
-                "Policies": [
-                    {
-                        "PolicyName": "AwsServiceAccess",
-                        "PolicyDocument": {
-                            "Version": "2012-10-17",
-                            "Statement": [
-                                {
-                                    "Effect": "Allow",
-                                    "Action": [
-                                        "s3:PutObject",
-                                        "s3:GetObject",
-                                        "s3:DeleteObject"
-                                    ],
-                                    "Resource": [ "arn:aws:s3:::premiere-poc/*" ]
-                                },
-                                {
-                                    "Sid": "Stmt1463078504000",
-                                    "Effect": "Allow",
-                                    "Action": [
-                                        "logs:CreateLogGroup",
-                                        "logs:CreateLogStream",
-                                        "logs:DescribeLogGroups",
-                                        "logs:DescribeLogStreams",
-                                        "logs:PutLogEvents"
-                                    ],
-                                    "Resource": [ "*" ]
-                                }
-                            ]
-                        }
-                    }
-
-                ]
-            }
-        },
-        "IAMInstanceProfile": {
-            "Type": "AWS::IAM::InstanceProfile",
-            "Properties": {
-                "Path": "/",
-                "Roles": [ { "Ref": "IamRole" } ]
-            }
-        },
-        "MyInstance": {
-            "DependsOn": "VPCStack",
-            "Type": "AWS::EC2::Instance",
-            "Properties": {
-                "BlockDeviceMappings" : [
-                    {
-                        "DeviceName" : "/dev/sda1",
-                        "Ebs" : { "VolumeSize" : "60" }
-                    }
-                ],
-                "InstanceType": {"Ref": "InstanceType"},
-                "IamInstanceProfile": {"Ref": "IAMInstanceProfile"},
-                "ImageId": { "Fn::FindInMap" : [ "Windows2016AMIMap", { "Ref" : "AWS::Region" }, "winami" ]},
-                "Tags": [
-                    {
-                        "Key": "Name",
-                        "Value": "edit-host-1"
-                    }
-                ],
-                "NetworkInterfaces" : [{
-                    "AssociatePublicIpAddress" : "true",
-                    "GroupSet"                 : [{ "Ref" : "EditHostSecurityGroup" }],
-                    "DeviceIndex"              : "0",
-                    "SubnetId"                 : { "Fn::GetAtt": [ "VPCStack",
-                        "Outputs.PublicSubnet1ID"
-                    ] }
-                }],
-                "KeyName": { "Ref": "KeyPairName" },
-                "UserData" : { "Fn::Base64" : { "Fn::Join" : ["", [
-                    "<script>\n",
-                    "cfn-init.exe -v -c config -s ", { "Ref" : "AWS::StackName" },
-                    " -r MyInstance",
-                    " --region ", { "Ref" : "AWS::Region" }, "\n",
-                    "</script>\n"
-                ]]}}
-            },
-            "CreationPolicy": {
-                "ResourceSignal": {
-                    "Count": "1",
-                    "Timeout": { "Ref": "StackTimeout" }
-                }
-            },
-            "Metadata": {
-                "AWS::CloudFormation::Init": {
-                    "configSets": {
-                        "config": [
-                            "setup",
-                            "config-video-editor"
+                    },
+                    "VPCID": {
+                        "Fn::GetAtt": [
+                            "VPCStack",
+                            "Outputs.VPCID"
                         ]
                     },
-                    "setup": {
-                        "files": {
-                            "c:\\cfn\\cfn-hup.conf": {
-                                "content": {
-                                    "Fn::Join": [
-                                        "",
-                                        [
-                                            "[main]\n",
-                                            "stack=",
-                                            {
-                                                "Ref": "AWS::StackName"
-                                            },
-                                            "\n",
-                                            "region=",
-                                            {
-                                                "Ref": "AWS::Region"
-                                            },
-                                            "\n"
-                                        ]
-                                    ]
-                                }
-                            },
-                            "c:\\cfn\\hooks.d\\cfn-auto-reloader.conf": {
-                                "content": {
-                                    "Fn::Join": [
-                                        "",
-                                        [
-                                            "[cfn-auto-reloader-hook]\n",
-                                            "triggers=post.update\n",
-                                            "path=Resources.MyInstance.Metadata.AWS::CloudFormation::Init\n",
-                                            "action=cfn-init.exe -v -c config -s ",
-                                            {
-                                                "Ref": "AWS::StackId"
-                                            },
-                                            " -r MyInstance",
-                                            " --region ",
-                                            {
-                                                "Ref": "AWS::Region"
-                                            },
-                                            "\n"
-                                        ]
-                                    ]
-                                }
-                            },
-                            "C:\\cfn\\scripts\\Unzip-Archive.ps1": {
-                                "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
-                                                ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "submodules/quickstart-microsoft-utilities/scripts/Unzip-Archive.ps1"
-                                        ]
-                                    ]
-                                }
-                            },
-                            "C:\\cfn\\modules\\AWSQuickStart.zip": {
-                                "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
-                                                ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "submodules/quickstart-microsoft-utilities/modules/AWSQuickStart.zip"
-                                        ]
-                                    ]
-                                }
-                            }
-                        },
-                        "services": {
-                            "windows": {
-                                "cfn-hup": {
-                                    "enabled": "true",
-                                    "ensureRunning": "true",
-                                    "files": [
-                                        "c:\\cfn\\cfn-hup.conf",
-                                        "c:\\cfn\\hooks.d\\cfn-auto-reloader.conf"
-                                    ]
-                                }
-                            }
-                        },
-                        "commands": {
-                            "a-set-execution-policy": {
-                                "command": "powershell.exe -Command \"Set-ExecutionPolicy RemoteSigned -Force\"",
-                                "waitAfterCompletion": "0"
-                            },
-                            "b-unpack-quickstart-module": {
-                                "command": "powershell.exe -Command C:\\cfn\\scripts\\Unzip-Archive.ps1 -Source C:\\cfn\\modules\\AWSQuickStart.zip -Destination C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules\\",
-                                "waitAfterCompletion": "0"
-                            },
-                            "c-init-quickstart-module": {
-                                "command": {
-                                    "Fn::Join": [
-                                        "",
-                                        [
-                                            "powershell.exe -Command \"",
-                                            "New-AWSQuickStartResourceSignal -Stack '",
-                                            {
-                                                "Ref": "AWS::StackName"
-                                            },
-                                            "' -Resource 'MyInstance' -Region '",
-                                            {
-                                                "Ref": "AWS::Region"
-                                            },
-                                            "'\""
-                                        ]
-                                    ]
-                                },
-                                "waitAfterCompletion": "0"
-                            }
-                        }
-                    },
-                    "config-video-editor" : {
-                        "files": {
-                            "c:\\Users\\Administrator\\Downloads\\install-video-editor.ps1": {
-                                "source": {
-                                    "Fn::Join" :  [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
-                                                ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/install-video-editor.ps1"
-                                        ]
-                                    ] }
-                            },
-                            "c:\\Users\\Administrator\\Downloads\\install-teradici.ps1": {
-                                "source": {
-                                    "Fn::Join" :  [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
-                                                ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/install-teradici.ps1"
-                                        ]
-                                    ] }
-                            },
-                            "c:\\Users\\Administrator\\Downloads\\install-gpu-drivers.ps1": {
-                                "source": {
-                                    "Fn::Join" :  [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
-                                                ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/install-gpu-drivers.ps1"
-                                        ]
-                                    ] }
-                            },
-                            "c:\\Users\\Administrator\\Downloads\\show-reboots.ps1": {
-                                "source": {
-                                    "Fn::Join" :  [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
-                                                ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/show-reboots.ps1"
-                                        ]
-                                    ] }
-                            },
-                            "c:\\Users\\Administrator\\Downloads\\install-packages.ps1": {
-                                "source": {
-                                    "Fn::Join" :  [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
-                                                ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/install-packages.ps1"
-                                        ]
-                                    ] }
-                            }
-                        },
-                        "commands": {
-                            "01-install-packages": {
-                                "command": {
-                                    "Fn::Join": [
-                                        "",
-                                        [
-                                            "powershell.exe -ExecutionPolicy Unrestricted C:\\Users\\Administrator\\Downloads\\install-packages.ps1 -verbose"
-                                        ]
-                                    ]
-                                }
-                            },
-                            "01-install-video-editor": {
-                                "command": {
-                                    "Fn::Join": [
-                                        "",
-                                        [
-                                            "powershell.exe -ExecutionPolicy Unrestricted C:\\Users\\Administrator\\Downloads\\install-video-editor.ps1 -verbose"
-                                        ]
-                                    ]
-                                }
-                            },
-                            "02-install-gpu-drivers": {
-                                "command": {
-                                    "Fn::Join": [
-                                        "",
-                                        [
-                                            "powershell.exe -ExecutionPolicy Unrestricted C:\\Users\\Administrator\\Downloads\\install-gpu-drivers.ps1 -verbose"
-                                        ]
-                                    ]
-                                },
-                                "waitAfterCompletion": "forever"
-                            },
-                            "03-install-teradici": {
-                                "command": {
-                                    "Fn::Join": [
-                                        "",
-                                        [
-                                            "powershell.exe -ExecutionPolicy Unrestricted C:\\Users\\Administrator\\Downloads\\install-teradici.ps1 ",
-                                            "-stack \"", { "Ref": "AWS::StackName" }, "\" -resource \"MyInstance\" -verbose"
-                                        ]
-                                    ]
-                                }
-                            }
-                        }
+                    "WAPADFSInstanceType": {
+                        "Ref": "WAPADFSInstanceType"
                     }
                 }
-            }
-        },
-        "EditHostSecurityGroup": {
-            "Type": "AWS::EC2::SecurityGroup",
-            "Properties": {
-                "GroupDescription": "ssh and web",
-                "SecurityGroupIngress": [
-                    {
-                        "IpProtocol": "tcp",
-                        "FromPort": "3389",
-                        "ToPort": "3389",
-                        "CidrIp": "0.0.0.0/0"
-                    },
-                    {
-                        "IpProtocol": "tcp",
-                        "FromPort": "443",
-                        "ToPort": "443",
-                        "CidrIp": "0.0.0.0/0"
-                    },
-                    {
-                        "IpProtocol": "udp",
-                        "FromPort": "4172",
-                        "ToPort": "4172",
-                        "CidrIp": "0.0.0.0/0"
-                    },
-                    {
-                        "IpProtocol": "tcp",
-                        "FromPort": "4172",
-                        "ToPort": "4172",
-                        "CidrIp": "0.0.0.0/0"
-                    }
-                ],
-                "VpcId": { "Fn::GetAtt": [ "VPCStack", "Outputs.VPCID" ] }
             }
         }
     }
