@@ -367,6 +367,372 @@
                 ],
                 "Path": "/"
             }
+        },
+        "VideoEditingAutoScalingGroup" : {
+            "Type" : "AWS::AutoScaling::AutoScalingGroup",
+                    "Properties": {
+                "LaunchConfigurationName": {
+                    "Ref": "VideoEditingLaunchConfiguration"
+                },
+                "VPCZoneIdentifier": [
+                    {
+                        "Ref": "PublicSubnet1ID"
+                    },
+                    {
+                        "Ref": "PublicSubnet2ID"
+                    }
+                ],
+                "MinSize": {
+                    "Ref": "NumberOfRDGWHosts"
+                },
+                "MaxSize": {
+                    "Ref": "NumberOfRDGWHosts"
+                },
+                "Cooldown": "300",
+                "DesiredCapacity": {
+                    "Ref": "NumberOfRDGWHosts"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "RDGW",
+                        "PropagateAtLaunch": "true"
+                    }
+                ]
+            },
+            "CreationPolicy": {
+                "ResourceSignal": {
+                    "Count": {
+                        "Ref": "NumberOfRDGWHosts"
+                    },
+                    "Timeout": "PT30M"
+                }
+            }
+        },
+        "VideoEditingLaunchConfiguration" : {
+            "Type" : "AWS::AutoScaling::LaunchConfiguration",
+            "Metadata": {
+                "AWS::CloudFormation::Authentication": {
+                    "S3AccessCreds": {
+                        "type": "S3",
+                        "roleName": {
+                            "Ref": "VideoEditingRole"
+                        },
+                        "buckets": [
+                            {
+                                "Ref": "QSS3BucketName"
+                            }
+                        ]
+                    }
+                },
+                "AWS::CloudFormation::Init": {
+                    "configSets": {
+                        "config": [
+                            "setup",
+                            "join",
+                            "installRDS",
+                            "finalize"
+                        ]
+                    },
+                    "setup": {
+                        "files": {
+                            "C:\\cfn\\scripts\\Unzip-Archive.ps1": {
+                                "source": {
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}submodules/quickstart-microsoft-utilities/scripts/Unzip-Archive.ps1",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                "authentication": "S3AccessCreds"
+                            },
+                            "C:\\cfn\\modules\\AWSQuickStart.zip": {
+                                "source": {
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}submodules/quickstart-microsoft-utilities/modules/AWSQuickStart.zip",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                "authentication": "S3AccessCreds"
+                            },
+                            "C:\\cfn\\scripts\\Join-Domain.ps1": {
+                                "source": {
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}submodules/quickstart-microsoft-utilities/scripts/Join-Domain.ps1",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                "authentication": "S3AccessCreds"
+                            },
+                            "c:\\cfn\\scripts\\Initialize-RDGW.ps1": {
+                                "source": {
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/Initialize-RDGW.ps1",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                "authentication": "S3AccessCreds"
+                            },
+                            "c:\\cfn\\scripts\\Set-EIP.ps1": {
+                                "source": {
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/Set-EIP.ps1",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                "authentication": "S3AccessCreds"
+                            }
+                        },
+                        "commands": {
+                            "a-set-execution-policy": {
+                                "command": "powershell.exe -Command \"Set-ExecutionPolicy RemoteSigned -Force\"",
+                                "waitAfterCompletion": "0"
+                            },
+                            "b-unpack-quickstart-module": {
+                                "command": "powershell.exe -Command C:\\cfn\\scripts\\Unzip-Archive.ps1 -Source C:\\cfn\\modules\\AWSQuickStart.zip -Destination C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules\\",
+                                "waitAfterCompletion": "0"
+                            },
+                            "c-init-quickstart-module": {
+                                "command": {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            "powershell.exe -Command \"",
+                                            "New-AWSQuickStartResourceSignal -Stack '",
+                                            {
+                                                "Ref": "AWS::StackName"
+                                            },
+                                            "' -Resource 'RDGWAutoScalingGroup' -Region '",
+                                            {
+                                                "Ref": "AWS::Region"
+                                            },
+                                            "'\""
+                                        ]
+                                    ]
+                                },
+                                "waitAfterCompletion": "0"
+                            }
+                        }
+                    },
+                    "join": {
+                        "commands": {
+                            "a-join-domain": {
+                                "command": {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            "powershell.exe -Command \"C:\\cfn\\scripts\\Join-Domain.ps1 -DomainName '",
+                                            {
+                                                "Ref": "DomainDNSName"
+                                            },
+                                            "' -UserName '",
+                                            {
+                                                "Ref": "DomainNetBIOSName"
+                                            },
+                                            "\\",
+                                            {
+                                                "Ref": "DomainAdminUser"
+                                            },
+                                            "' -Password '",
+                                            {
+                                                "Ref": "DomainAdminPassword"
+                                            },
+                                            "'\""
+                                        ]
+                                    ]
+                                },
+                                "waitAfterCompletion": "forever"
+                            }
+                        }
+                    },
+                    "installRDS": {
+                        "commands": {
+                            "a-install-rds": {
+                                "command": {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            "powershell.exe -Command \"Install-WindowsFeature RDS-Gateway,RSAT-RDS-Gateway\""
+                                        ]
+                                    ]
+                                },
+                                "waitAfterCompletion": "0"
+                            },
+                            "b-configure-rdgw": {
+                                "command": {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            "powershell.exe -ExecutionPolicy RemoteSigned ",
+                                            "C:\\cfn\\scripts\\Initialize-RDGW.ps1 -ServerFQDN $($env:COMPUTERNAME + '.",
+                                            {
+                                                "Ref": "DomainDNSName"
+                                            },
+                                            "') -DomainNetBiosName ",
+                                            {
+                                                "Ref": "DomainNetBIOSName"
+                                            },
+                                            " -GroupName 'domain admins'"
+                                        ]
+                                    ]
+                                },
+                                "waitAfterCompletion": "0"
+                            },
+                            "c-assign-eip": {
+                                "command": {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            "powershell.exe -ExecutionPolicy RemoteSigned ",
+                                            "C:\\cfn\\scripts\\Set-EIP.ps1 -EIPs @('",
+                                            {
+                                                "Ref": "EIP1"
+                                            },
+                                            "','",
+                                            {
+                                                "Fn::If": [
+                                                    "2RDGWCondition",
+                                                    {
+                                                        "Ref": "EIP2"
+                                                    },
+                                                    "Null"
+                                                ]
+                                            },
+                                            "','",
+                                            {
+                                                "Fn::If": [
+                                                    "3RDGWCondition",
+                                                    {
+                                                        "Ref": "EIP3"
+                                                    },
+                                                    "Null"
+                                                ]
+                                            },
+                                            "','",
+                                            {
+                                                "Fn::If": [
+                                                    "4RDGWCondition",
+                                                    {
+                                                        "Ref": "EIP4"
+                                                    },
+                                                    "Null"
+                                                ]
+                                            },
+                                            "')"
+                                        ]
+                                    ]
+                                },
+                                "waitAfterCompletion": "0"
+                            }
+                        }
+                    },
+                    "finalize": {
+                        "commands": {
+                            "1-signal-success": {
+                                "command": "powershell.exe -Command \"Write-AWSQuickStartStatus\"",
+                                "waitAfterCompletion": "0"
+                            }
+                        }
+                    }
+                }
+            },
+            "Properties": {
+                "ImageId": {
+                    "Fn::FindInMap": [
+                        "AWSAMIRegionMap",
+                        {
+                            "Ref": "AWS::Region"
+                        },
+                        "WS2012R2"
+                    ]
+                },
+                "SecurityGroups": [
+                    {
+                        "Ref": "VideoEditingSG"
+                    },
+                    {
+                        "Ref": "DomainMemberSGID"
+                    }
+                ],
+                "IamInstanceProfile": {
+                    "Ref": "VideoEditingProfile"
+                },
+                "InstanceType": {
+                    "Ref": "RDGWInstanceType"
+                },
+                "BlockDeviceMappings": [
+                    {
+                        "DeviceName": "/dev/sda1",
+                        "Ebs": {
+                            "VolumeSize": "50",
+                            "VolumeType": "gp2"
+                        }
+                    }
+                ],
+                "KeyName": {
+                    "Ref": "KeyPairName"
+                },
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
+                            "",
+                            [
+                                "<script>\n",
+                                "cfn-init.exe -v -c config -s ",
+                                {
+                                    "Ref": "AWS::StackId"
+                                },
+                                " -r RDGWLaunchConfiguration",
+                                " --region ",
+                                {
+                                    "Ref": "AWS::Region"
+                                },
+                                "\n",
+                                "</script>\n"
+                            ]
+                        ]
+                    }
+                }
+            }
         }
     }
 }
