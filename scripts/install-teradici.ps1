@@ -1,10 +1,10 @@
 [CmdletBinding()]
 param(
     [Parameter(Mandatory=$false)]
-    [string]$Source = 'https://www.dropbox.com/s/ily0pzhn855y2zs/PCoIP_agent_release_installer_2.7.0.4060_graphics.exe?dl=1',
+    [string]$Source = 'https://www.dropbox.com/s/6oe5264e4vovtnt/PCoIP_agent_release_installer_2.8.0.6123_graphics.exe?dl=1',
 
     [Parameter(Mandatory=$false)]
-    [string]$Destination = 'C:\cfn\downloads\PCoIP_agent_release_installer_2.7.0.4060_graphics.exe',
+    [string]$Destination = 'C:\cfn\downloads\PCoIP_agent_release_installer_2.8.0.6123_graphics.exe',
 
     [string]$stack,
 
@@ -12,12 +12,15 @@ param(
 )
 
 
+# 2.8 teradici installer
+# https://www.dropbox.com/s/6oe5264e4vovtnt/PCoIP_agent_release_installer_2.8.0.6123_graphics.exe?dl=1
+
 # 2.7 teradici installer
 # https://www.dropbox.com/s/ily0pzhn855y2zs/PCoIP_agent_release_installer_2.7.0.4060_graphics.exe?dl=1
 
 # 2.5 teradici installer
 # s3://premiere-poc/PCoIP_agent_release_installer_2.5.1.908_graphics.exe
-# old and appears to be gone: https://dl.dropbox.com/sh/a6mjoxkb03gnghf/AADmNMMpIWQMOMSogX8ERI2ja/PCoIP_agent_release_installer_2.5.1.908_graphics.exe?dl=1
+# old and appears to be gone: https://dl.dropbox.com/sh/a6mjoxkb03gnghf/AADmNMMpIWQMOMSogX8ERI2ja/PCoIP_agent_release_installer_2.8.0.6123_graphics.exe?dl=1
 
 try {
     $ErrorActionPreference = "Stop"
@@ -51,30 +54,30 @@ try {
     if ([System.IO.Path]::GetExtension($Destination) -eq '.exe') {
        Write-Verbose "Start install of Teradici ..."
        #
-       # Start-Process -FilePath $Destination -ArgumentList '/S','/nodeskside' -Wait
+       Start-Process -FilePath $Destination -ArgumentList '/S','/nodeskside', '/NoPostReboot' -Wait
 
        # ProcessStartInfo is a way to try and trap the Exit 1 coming from the Teradici installer
        #
 
        # using a ProcessStartInfo object is masking the exit 1
        #
-       $pinfo = New-Object System.Diagnostics.ProcessStartInfo
-       $pinfo.FileName = $Destination
-       $pinfo.RedirectStandardError = $true
-       $pinfo.RedirectStandardOutput = $true
-       $pinfo.UseShellExecute = $false
-       $pinfo.Arguments = "/S /nodeskside /NoPostReboot"
-       $p = New-Object System.Diagnostics.Process
-       $p.StartInfo = $pinfo
-       $p.Start()
-       $p.WaitForExit()
-       $stdout = $p.StandardOutput.ReadToEnd()
-       $stderr = $p.StandardError.ReadToEnd()
-       Write-Verbose "Teradici process stdout: $stdout"
-       Write-Verbose "Teradici process stderr: $stderr"
-       Write-Verbose "Teradici exit code:"
-       $p.ExitCode | Write-Verbose
-       Write-Verbose "complete: install Teradici"
+       #$pinfo = New-Object System.Diagnostics.ProcessStartInfo
+       #$pinfo.FileName = $Destination
+       #$pinfo.RedirectStandardError = $true
+       #$pinfo.RedirectStandardOutput = $true
+       #$pinfo.UseShellExecute = $false
+       #$pinfo.Arguments = "/S /nodeskside /NoPostReboot"
+       #$p = New-Object System.Diagnostics.Process
+       #$p.StartInfo = $pinfo
+       #$p.Start()
+       #$p.WaitForExit()
+       #$stdout = $p.StandardOutput.ReadToEnd()
+       #$stderr = $p.StandardError.ReadToEnd()
+       #Write-Verbose "Teradici process stdout: $stdout"
+       #Write-Verbose "Teradici process stderr: $stderr"
+       #Write-Verbose "Teradici exit code:"
+       #$p.ExitCode | Write-Verbose
+       #Write-Verbose "complete: install Teradici"
 
        Write-Verbose "Creating pcoip_control_panel.exe shortcut"
        # create shortcut to teradici control panel

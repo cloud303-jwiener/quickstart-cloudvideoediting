@@ -4,19 +4,15 @@
         "ParameterValue": "us-east-1a, us-east-1d"
     },
     {
-        "ParameterKey": "DMZ1CIDR",
-        "ParameterValue": "10.0.32.0/19"
-    },
-    {
-        "ParameterKey": "DMZ2CIDR",
-        "ParameterValue": "10.0.128.0/20"
+        "ParameterKey": "DomainAdminUser",
+        "ParameterValue": "EditAdmU01"
     },
     {
         "ParameterKey": "DomainAdminPassword",
         "ParameterValue": "AdminAWS17"
     },
     {
-        "ParameterKey": "InstanceType",
+        "ParameterKey": "EditHostInstanceType",
         "ParameterValue": "g2.8xlarge"
     },
     {
@@ -29,11 +25,15 @@
     },
     {
         "ParameterKey": "QSS3KeyPrefix",
-        "ParameterValue": "videoediting"
+        "ParameterValue": "videoediting/"
     },
     {
         "ParameterKey": "RestoreModePassword",
         "ParameterValue": "Test2017A$"
+    },
+    {
+        "ParameterKey": "RDGWCIDR",
+        "ParameterValue": "0.0.0.0/0"
     },
     {
         "ParameterKey": "VPCCIDR",
