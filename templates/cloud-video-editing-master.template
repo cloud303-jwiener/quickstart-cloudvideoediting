@@ -30,8 +30,7 @@
                         "ADServer2InstanceType",
                         "ADServer2NetBIOSName",
                         "ADServer2PrivateIP",
-                        "RDGWInstanceType",
-                        "WAPADFSInstanceType"
+                        "RDGWInstanceType"
                     ]
                 },
                 {
@@ -130,9 +129,6 @@
                 },
                 "VPCCIDR": {
                     "default": "VPC CIDR"
-                },
-                "WAPADFSInstanceType": {
-                    "default": "WAP and ADFS Server Instance Type"
                 }
             }
         }
@@ -347,15 +343,6 @@
             "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
             "Default": "10.0.0.0/16",
             "Description": "CIDR Block for the VPC",
-            "Type": "String"
-        },
-        "WAPADFSInstanceType": {
-            "AllowedValues": [
-                "t2.large",
-                "c4.2xlarge"
-            ],
-            "Default": "c4.2xlarge",
-            "Description": "Amazon EC2 instance type for the WAP and ADFS Servers",
             "Type": "String"
         }
     },

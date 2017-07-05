@@ -1,7 +1,7 @@
 [
     {
         "ParameterKey": "AvailabilityZones",
-        "ParameterValue": "us-east-1a, us-east-1d"
+        "ParameterValue": "$[alfred_getaz_2]"
     },
     {
         "ParameterKey": "DomainAdminUser",
@@ -9,7 +9,7 @@
     },
     {
         "ParameterKey": "DomainAdminPassword",
-        "ParameterValue": "AdminAWS17"
+        "ParameterValue": "$[alfred_genpass_32]"
     },
     {
         "ParameterKey": "EditHostInstanceType",
@@ -17,15 +17,7 @@
     },
     {
         "ParameterKey": "KeyPairName",
-        "ParameterValue": "mark-internal"
-    },
-    {
-        "ParameterKey": "QSS3BucketName",
-        "ParameterValue": "mark-awsquickstart-test"
-    },
-    {
-        "ParameterKey": "QSS3KeyPrefix",
-        "ParameterValue": "videoediting/"
+        "ParameterValue": "$[alfred_getkeypair]"
     },
     {
         "ParameterKey": "RestoreModePassword",
@@ -33,10 +25,6 @@
     },
     {
         "ParameterKey": "RDGWCIDR",
-        "ParameterValue": "0.0.0.0/0"
-    },
-    {
-        "ParameterKey": "VPCCIDR",
         "ParameterValue": "10.0.0.0/16"
     }
 ]

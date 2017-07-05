@@ -179,7 +179,9 @@
     },
     "Mappings": {
         "AWSAMIRegionMap": {
-            "AMI": { "WS2016BASE": "Windows_Server-2016-Base" },
+            "AMI": {
+                "WS2016BASE": "Windows_Server-2016-Base"
+            },
             "ap-northeast-1": {
                 "WS2016BASE": ""
             },
@@ -223,7 +225,7 @@
                 "WS2016BASE": ""
             }
         }
-   },
+    },
     "Resources": {
         "VideoEditingRole": {
             "Type": "AWS::IAM::Role",
@@ -237,7 +239,9 @@
                                     "Action": [
                                         "s3:GetObject"
                                     ],
-                                    "Resource": [ "arn:aws:s3:::premiere-poc/*" ],
+                                    "Resource": [
+                                        "arn:aws:s3:::premiere-poc/*"
+                                    ],
                                     "Effect": "Allow"
                                 }
                             ]
@@ -305,12 +309,14 @@
                         "CidrIp": "0.0.0.0/0"
                     }
                 ],
-                "VpcId": { "Ref": "VPCID" }
+                "VpcId": {
+                    "Ref": "VPCID"
+                }
             }
         },
-        "VideoEditingAutoScalingGroup" : {
-            "Type" : "AWS::AutoScaling::AutoScalingGroup",
-                    "Properties": {
+        "VideoEditingAutoScalingGroup": {
+            "Type": "AWS::AutoScaling::AutoScalingGroup",
+            "Properties": {
                 "LaunchConfigurationName": {
                     "Ref": "VideoEditingLaunchConfiguration"
                 },
@@ -348,9 +354,9 @@
                     "Timeout": "PT30M"
                 }
             }
-       },
-        "VideoEditingLaunchConfiguration" : {
-            "Type" : "AWS::AutoScaling::LaunchConfiguration",
+        },
+        "VideoEditingLaunchConfiguration": {
+            "Type": "AWS::AutoScaling::LaunchConfiguration",
             "Metadata": {
                 "AWS::CloudFormation::Authentication": {
                     "S3AccessCreds": {

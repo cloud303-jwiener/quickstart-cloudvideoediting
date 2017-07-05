@@ -1,25 +1,24 @@
 global:
-  qsname: quickstart-cloudvideoediting
-  owner: quickstart-eng@amazon.com
   marketplace-ami: false
-  reporting: true
+  owner: quickstart-eng@amazon.com
+  qsname: quickstart-cloudvideoediting
   regions:
     - ap-northeast-1
     - ap-northeast-2
+    - ap-south-1
     - ap-southeast-1
     - ap-southeast-2
+    - ca-central-1
     - eu-central-1
     - eu-west-1
+    - eu-west-2
     - sa-east-1
     - us-east-1
+    - us-east-2
     - us-west-1
     - us-west-2
-  cis3bucket:  s3://quickstart-ci-bucket
- 
+  reporting: true
 tests:
-  quickstart-cloudvideoeditingt1:
-    template_file: quickstart-cloudvideoediting-example1.template
-    parameter_input: quickstart-cloudvideoediting-exampleparms1.json
-  quickstart-cloudvideoeditingt2:
-    template_file: quickstart-cloudvideoediting-example2.template
-    parameter_input: quickstart-cloudvideoediting-exampleparms2.json
+  master:
+    parameter_input: cloud-video-editing-master.json
+    template_file: cloud-video-editing-master.template
