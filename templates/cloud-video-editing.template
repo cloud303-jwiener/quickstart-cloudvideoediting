@@ -180,49 +180,49 @@
     "Mappings": {
         "AWSAMIRegionMap": {
             "AMI": {
-                "WS2016BASE": "Windows_Server-2016-Base"
+                "WS2016FULLBASE": "Windows_Server-2016-English-Full-Base-2017.06.14"
             },
             "ap-northeast-1": {
-                "WS2016BASE": ""
+                "WS2016FULLBASE": "ami-26777c41"
             },
             "ap-northeast-2": {
-                "WS2016BASE": ""
+                "WS2016FULLBASE": "ami-68b26d06"
             },
             "ap-south-1": {
-                "WS2016BASE": ""
+                "WS2016FULLBASE": "ami-6695ea09"
             },
             "ap-southeast-1": {
-                "WS2016BASE": ""
+                "WS2016FULLBASE": "ami-5d2fad3e"
             },
             "ap-southeast-2": {
-                "WS2016BASE": ""
+                "WS2016FULLBASE": "ami-8de6f7ee"
             },
             "ca-central-1": {
-                "WS2016BASE": ""
+                "WS2016FULLBASE": "ami-dbdf60bf"
             },
             "eu-central-1": {
-                "WS2016BASE": ""
+                "WS2016FULLBASE": "ami-9fc86ff0"
             },
             "eu-west-1": {
-                "WS2016BASE": ""
+                "WS2016FULLBASE": "ami-2d809e4b"
             },
             "eu-west-2": {
-                "WS2016BASE": ""
+                "WS2016FULLBASE": "ami-23405647"
             },
             "sa-east-1": {
-                "WS2016BASE": ""
+                "WS2016FULLBASE": "ami-76147f1a"
             },
             "us-east-1": {
-                "WS2016BASE": "ami-f1b5cfe7"
+                "WS2016FULLBASE": "ami-f4d1f0e2"
             },
             "us-east-2": {
-                "WS2016BASE": "xx no gpus xx"
+                "WS2016FULLBASE": "ami-3487a151"
             },
             "us-west-1": {
-                "WS2016BASE": ""
+                "WS2016FULLBASE": "ami-7f2e031f"
             },
             "us-west-2": {
-                "WS2016BASE": ""
+                "WS2016FULLBASE": "ami-48b4bf31"
             }
         }
     },
