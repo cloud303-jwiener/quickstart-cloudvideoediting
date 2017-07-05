@@ -579,7 +579,7 @@
                         {
                             "Ref": "AWS::Region"
                         },
-                        "WS2016BASE"
+                        "WS2016FULLBASE"
                     ]
                 },
                 "SecurityGroups": [
