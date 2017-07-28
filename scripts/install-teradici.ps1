@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
     [Parameter(Mandatory=$false)]
-    [string]$Source = 'https://www.dropbox.com/s/6oe5264e4vovtnt/PCoIP_agent_release_installer_2.8.0.6123_graphics.exe?dl=1',
+    [string]$Source = 'https://fileshare.teradici.com/s/50MC5kGr3YoCjgG/download',
 
     [Parameter(Mandatory=$false)]
     [string]$Destination = 'C:\cfn\downloads\PCoIP_agent_release_installer_2.8.0.6123_graphics.exe',
@@ -11,16 +11,6 @@ param(
     [string]$resource
 )
 
-
-# 2.8 teradici installer
-# https://www.dropbox.com/s/6oe5264e4vovtnt/PCoIP_agent_release_installer_2.8.0.6123_graphics.exe?dl=1
-
-# 2.7 teradici installer
-# https://www.dropbox.com/s/ily0pzhn855y2zs/PCoIP_agent_release_installer_2.7.0.4060_graphics.exe?dl=1
-
-# 2.5 teradici installer
-# s3://premiere-poc/PCoIP_agent_release_installer_2.5.1.908_graphics.exe
-# old and appears to be gone: https://dl.dropbox.com/sh/a6mjoxkb03gnghf/AADmNMMpIWQMOMSogX8ERI2ja/PCoIP_agent_release_installer_2.8.0.6123_graphics.exe?dl=1
 
 try {
     $ErrorActionPreference = "Stop"

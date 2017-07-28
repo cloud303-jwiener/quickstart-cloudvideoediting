@@ -1,7 +1,11 @@
 [
     {
         "ParameterKey": "AvailabilityZones",
-        "ParameterValue": "$[alfred_getaz_2]"
+        "ParameterValue": "us-east-1a, us-east-1e"
+    },
+    {
+        "ParameterKey": "NumberOfEditHosts",
+        "ParameterValue": "1"
     },
     {
         "ParameterKey": "DomainAdminUser",
@@ -9,7 +13,15 @@
     },
     {
         "ParameterKey": "DomainAdminPassword",
-        "ParameterValue": "$[alfred_genpass_32]"
+        "ParameterValue": "D0Adm$aws"
+    },
+    {
+        "ParameterKey": "QSS3BucketName",
+        "ParameterValue": "mark-awsquickstart-test"
+    },
+    {
+        "ParameterKey": "QSS3KeyPrefix",
+        "ParameterValue": "videoediting/"
     },
     {
         "ParameterKey": "EditHostInstanceType",
@@ -17,7 +29,7 @@
     },
     {
         "ParameterKey": "KeyPairName",
-        "ParameterValue": "$[alfred_getkeypair]"
+        "ParameterValue": "mark-internal"
     },
     {
         "ParameterKey": "RestoreModePassword",

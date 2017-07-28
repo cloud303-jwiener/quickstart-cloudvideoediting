@@ -1,37 +1,11 @@
 [CmdletBinding()]
 
-$winVersion = [Environment]::OSVersion.Version
-if ($winVersion.Major -eq 10) {
-    Write-Verbose 'Detected Windows Server 2016'
-
-    # I was told win10 is very close to windows server 2016
-    #
-    # $Source = 'http://us.download.nvidia.com/Windows/Quadro_Certified/362.56/362.56-quadro-grid-desktop-notebook-win10-64bit-international-whql.exe'
-    # $Destination = 'c:\Users\Administrator\Downloads\362.56-quadro-grid-desktop-notebook-win10-64bit-international-whql.exe'
-
-    # 369.95
-    #
-    $Source = 'http://us.download.nvidia.com/Windows/Quadro_Certified/GRID/369.95/369.95-quadro-winserv-2016-64bit-international-whql.exe'
-    $Destination = 'c:\Users\Administrator\Downloads\369.95-quadro-winserv-2016-64bit-international-whql.exe'
-} elseif ($winVersion.Major -eq 6 -and $winVersion.Minor -eq 1) {
-    Write-Verbose 'Detected Windows Server 2008R2'
-
-    $Source = 'http://us.download.nvidia.com/Windows/Quadro_Certified/362.56/362.56-quadro-tesla-grid-winserv2008-2008r2-2012-64bit-international-whql.exe'
-    $Destination = 'c:\Users\Administrator\Downloads\362.56-quadro-tesla-grid-winserv2008-2008r2-2012-64bit-international.exe'
-} else {
-    Write-Verbose 'Unsupported version of Windows: $winVersion'
-    throw 'Unsupported version of Windows: $winVersion'
-}
-
 
 #
 # 362.56 was recommended due to performance issues by teradici ... need to double check in email
 #
 # http://us.download.nvidia.com/Windows/Quadro_Certified/362.56/362.56-quadro-grid-desktop-notebook-win10-64bit-international-whql.exe
 
-
-# extract the nvidia setup because we can't pass the no reboot flag to the whql exe ... it ignores it
-#
 
 #
 # install GPU drivers
@@ -45,6 +19,30 @@ if ($winVersion.Major -eq 10) {
 
 try {
     $ErrorActionPreference = "Stop"
+
+
+    $winVersion = [Environment]::OSVersion.Version
+    if ($winVersion.Major -eq 10) {
+        Write-Verbose 'Detected Windows Server 2016'
+
+        # I was told win10 is very close to windows server 2016
+        #
+        # $Source = 'http://us.download.nvidia.com/Windows/Quadro_Certified/362.56/362.56-quadro-grid-desktop-notebook-win10-64bit-international-whql.exe'
+        # $Destination = 'c:\Users\Administrator\Downloads\362.56-quadro-grid-desktop-notebook-win10-64bit-international-whql.exe'
+
+        # 369.95
+        #
+        $Source = 'http://us.download.nvidia.com/Windows/Quadro_Certified/GRID/369.95/369.95-quadro-winserv-2016-64bit-international-whql.exe'
+        $Destination = 'c:\Users\Administrator\Downloads\369.95-quadro-winserv-2016-64bit-international-whql.exe'
+    } elseif ($winVersion.Major -eq 6 -and $winVersion.Minor -eq 1) {
+        Write-Verbose 'Detected Windows Server 2008R2'
+
+        $Source = 'http://us.download.nvidia.com/Windows/Quadro_Certified/362.56/362.56-quadro-tesla-grid-winserv2008-2008r2-2012-64bit-international-whql.exe'
+        $Destination = 'c:\Users\Administrator\Downloads\362.56-quadro-tesla-grid-winserv2008-2008r2-2012-64bit-international.exe'
+    } else {
+        Write-Verbose 'Unsupported version of Windows: $winVersion'
+        throw 'Unsupported version of Windows: $winVersion'
+    }
 
     Write-Verbose "Unzip GPU Drivers"
     $parentDir = Split-Path $Destination -Parent

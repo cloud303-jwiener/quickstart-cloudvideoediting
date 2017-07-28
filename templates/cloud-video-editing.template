@@ -20,6 +20,8 @@
                     },
                     "Parameters": [
                         "EditHostInstanceType",
+                        "NumberOfEditHosts",
+                        "EditHostAccessCIDR",
                         "KeyPairName"
                     ]
                 },
@@ -62,6 +64,9 @@
                 },
                 "EditHostInstanceType": {
                     "default": "Edit Host Instance Type (GPU is necessary)"
+                },
+                "EditHostAccessCIDR": {
+                    "default": "CIDR to restrict access to edit host"
                 },
                 "KeyPairName": {
                     "default": "Key Pair Name"
@@ -123,11 +128,19 @@
         },
         "EditHostInstanceType": {
             "AllowedValues": [
-                "g2.2xlarge",
-                "g2.8xlarge"
+                "g3.4xlarge",
+                "g3.8xlarge",
+                "g3.16xlarge"
             ],
-            "Default": "g2.8xlarge",
+            "Default": "g3.4xlarge",
             "Description": "Amazon EC2 instance type for the Edit Host",
+            "Type": "String"
+        },
+        "EditHostAccessCIDR": {
+            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
+            "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
+            "Default": "10.0.128.0/20",
+            "Description": "CIDR Block for the public DMZ subnet 1 located in Availability Zone 1",
             "Type": "String"
         },
         "KeyPairName": {
@@ -136,8 +149,7 @@
         },
         "NumberOfEditHosts": {
             "Description": "Number of Edit Hosts to spin up.",
-            "Type": "String",
-            "Default": "2"
+            "Type": "String"
         },
         "PublicSubnet1ID": {
             "Description": "ID of the public subnet 1 in Availability Zone 1 (e.g., subnet-e3246d8e)",
@@ -228,9 +240,7 @@
                                     "Action": [
                                         "s3:GetObject"
                                     ],
-                                    "Resource": [
-                                        "arn:aws:s3:::premiere-poc/*"
-                                    ],
+                                    "Resource": {"Fn::Sub": "arn:aws:s3:::${QSS3BucketName}/${QSS3KeyPrefix}*"},
                                     "Effect": "Allow"
                                 }
                             ]
@@ -277,25 +287,25 @@
                         "IpProtocol": "tcp",
                         "FromPort": "3389",
                         "ToPort": "3389",
-                        "CidrIp": "0.0.0.0/0"
+                        "CidrIp": {"Ref": "EditHostAccessCIDR"}
                     },
                     {
                         "IpProtocol": "tcp",
                         "FromPort": "443",
                         "ToPort": "443",
-                        "CidrIp": "0.0.0.0/0"
+                        "CidrIp": {"Ref": "EditHostAccessCIDR"}
                     },
                     {
                         "IpProtocol": "udp",
                         "FromPort": "4172",
                         "ToPort": "4172",
-                        "CidrIp": "0.0.0.0/0"
+                        "CidrIp": {"Ref": "EditHostAccessCIDR"}
                     },
                     {
                         "IpProtocol": "tcp",
                         "FromPort": "4172",
                         "ToPort": "4172",
-                        "CidrIp": "0.0.0.0/0"
+                        "CidrIp": {"Ref": "EditHostAccessCIDR"}
                     }
                 ],
                 "VpcId": {

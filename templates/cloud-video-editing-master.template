@@ -30,7 +30,8 @@
                         "ADServer2InstanceType",
                         "ADServer2NetBIOSName",
                         "ADServer2PrivateIP",
-                        "RDGWInstanceType"
+                        "RDGWInstanceType",
+                        "NumberOfEditHosts"
                     ]
                 },
                 {
@@ -230,10 +231,11 @@
         },
         "EditHostInstanceType": {
             "AllowedValues": [
-                "g2.2xlarge",
-                "g2.8xlarge"
+                "g3.4xlarge",
+                "g3.8xlarge",
+                "g3.16xlarge"
             ],
-            "Default": "g2.8xlarge",
+            "Default": "g3.4xlarge",
             "Description": "Amazon EC2 instance type for the Video Editing Servers",
             "Type": "String"
         },
