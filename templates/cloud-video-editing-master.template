@@ -254,7 +254,7 @@
                 "7",
                 "8"
             ],
-            "Default": "2",
+            "Default": "1",
             "Description": "Enter the number of Video Editing hosts to create",
             "Type": "String"
         },
