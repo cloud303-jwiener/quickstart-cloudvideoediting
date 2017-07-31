@@ -240,7 +240,9 @@
                                     "Action": [
                                         "s3:GetObject"
                                     ],
-                                    "Resource": {"Fn::Sub": "arn:aws:s3:::${QSS3BucketName}/${QSS3KeyPrefix}*"},
+                                    "Resource": {
+                                        "Fn::Sub": "arn:aws:s3:::${QSS3BucketName}/${QSS3KeyPrefix}*"
+                                    },
                                     "Effect": "Allow"
                                 }
                             ]
@@ -287,25 +289,33 @@
                         "IpProtocol": "tcp",
                         "FromPort": "3389",
                         "ToPort": "3389",
-                        "CidrIp": {"Ref": "EditHostAccessCIDR"}
+                        "CidrIp": {
+                            "Ref": "EditHostAccessCIDR"
+                        }
                     },
                     {
                         "IpProtocol": "tcp",
                         "FromPort": "443",
                         "ToPort": "443",
-                        "CidrIp": {"Ref": "EditHostAccessCIDR"}
+                        "CidrIp": {
+                            "Ref": "EditHostAccessCIDR"
+                        }
                     },
                     {
                         "IpProtocol": "udp",
                         "FromPort": "4172",
                         "ToPort": "4172",
-                        "CidrIp": {"Ref": "EditHostAccessCIDR"}
+                        "CidrIp": {
+                            "Ref": "EditHostAccessCIDR"
+                        }
                     },
                     {
                         "IpProtocol": "tcp",
                         "FromPort": "4172",
                         "ToPort": "4172",
-                        "CidrIp": {"Ref": "EditHostAccessCIDR"}
+                        "CidrIp": {
+                            "Ref": "EditHostAccessCIDR"
+                        }
                     }
                 ],
                 "VpcId": {
