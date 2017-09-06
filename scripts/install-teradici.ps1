@@ -4,13 +4,14 @@ param(
     [string]$Source = 'https://fileshare.teradici.com/s/50MC5kGr3YoCjgG/download',
 
     [Parameter(Mandatory=$false)]
-    [string]$Destination = 'C:\cfn\downloads\PCoIP_agent_release_installer_2.8.0.6123_graphics.exe',
-
-    [string]$stack,
-
-    [string]$resource
+    [string]$Destination = 'C:\cfn\downloads\PCoIP_agent_release_installer_2.8.0.6123_graphics.exe'
 )
 
+#
+# to install a teradici license:
+#
+#           'C:\Program Files (x86)\Teradici\PCoIP Agent\pcoip-register-host.ps1' -RegistrationCode '<YourRegistratonCode>'
+#
 
 try {
     $ErrorActionPreference = "Stop"
@@ -43,31 +44,9 @@ try {
 
     if ([System.IO.Path]::GetExtension($Destination) -eq '.exe') {
        Write-Verbose "Start install of Teradici ..."
+       # '/NoPostReboot' - to prevent reboot
        #
-       Start-Process -FilePath $Destination -ArgumentList '/S','/nodeskside', '/NoPostReboot' -Wait
-
-       # ProcessStartInfo is a way to try and trap the Exit 1 coming from the Teradici installer
-       #
-
-       # using a ProcessStartInfo object is masking the exit 1
-       #
-       #$pinfo = New-Object System.Diagnostics.ProcessStartInfo
-       #$pinfo.FileName = $Destination
-       #$pinfo.RedirectStandardError = $true
-       #$pinfo.RedirectStandardOutput = $true
-       #$pinfo.UseShellExecute = $false
-       #$pinfo.Arguments = "/S /nodeskside /NoPostReboot"
-       #$p = New-Object System.Diagnostics.Process
-       #$p.StartInfo = $pinfo
-       #$p.Start()
-       #$p.WaitForExit()
-       #$stdout = $p.StandardOutput.ReadToEnd()
-       #$stderr = $p.StandardError.ReadToEnd()
-       #Write-Verbose "Teradici process stdout: $stdout"
-       #Write-Verbose "Teradici process stderr: $stderr"
-       #Write-Verbose "Teradici exit code:"
-       #$p.ExitCode | Write-Verbose
-       #Write-Verbose "complete: install Teradici"
+       Start-Process -FilePath $Destination -ArgumentList '/S','/nodeskside', '/NoPostReboot'  -Wait
 
        Write-Verbose "Creating pcoip_control_panel.exe shortcut"
        # create shortcut to teradici control panel
@@ -86,13 +65,13 @@ try {
        $Shortcut = $WshShell.CreateShortcut($desktopPath)
        $Shortcut.TargetPath = "C:\Program Files (x86)\Teradici\PCoIP Agent\bin\pcoip_control_panel.exe"
        $Shortcut.Save()
+
+       # we don't allow Teradici to reboot after install or else the above shortcut would get interrupted
+       Restart-Computer
     } else {
         throw "Problem installing Teradici, not .exe extension"
     }
     Write-Verbose "Install Teradici complete"
-
-    Write-Verbose "cfn-signal --success --stack $stack  --resource $resource"
-    cfn-signal --success true --stack $stack --resource $resource
 }
 catch {
     Write-Verbose "catch: $_"
