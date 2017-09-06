@@ -242,6 +242,20 @@
                                     ],
                                     "Resource": {"Fn::Sub": "arn:aws:s3:::${QSS3BucketName}/${QSS3KeyPrefix}*"},
                                     "Effect": "Allow"
+                                },
+                                {
+                                    "Action": [
+                                        "s3:ListBucket"
+                                    ],
+                                    "Resource": "arn:aws:s3:::ec2-windows-nvidia-drivers",
+                                    "Effect": "Allow"
+                                },
+                                {
+                                    "Action": [
+                                        "s3:GetObject"
+                                    ],
+                                    "Resource": "arn:aws:s3:::ec2-windows-nvidia-drivers/*",
+                                    "Effect": "Allow"
                                 }
                             ]
                         },
@@ -374,7 +388,6 @@
                     "configSets": {
                         "config": [
                             "setup",
-                            "join",
                             "configVideoEditor",
                             "finalize"
                         ]
@@ -550,25 +563,22 @@
                                     "Fn::Join": [
                                         "",
                                         [
-                                            "powershell.exe -ExecutionPolicy Unrestricted C:\\Users\\Administrator\\Downloads\\install-gpu-drivers.ps1 -WinVersion windows2016 -verbose"
+                                            "powershell.exe -ExecutionPolicy Unrestricted C:\\Users\\Administrator\\Downloads\\install-gpu-drivers.ps1 -verbose"
                                         ]
                                     ]
-                                }
+                                },
+                                "waitAfterCompletion": "forever"
                             },
                             "15-install-teradici": {
                                 "command": {
                                     "Fn::Join": [
                                         "",
                                         [
-                                            "powershell.exe -ExecutionPolicy Unrestricted C:\\Users\\Administrator\\Downloads\\install-teradici.ps1 ",
-                                            "-stack \"",
-                                            {
-                                                "Ref": "AWS::StackName"
-                                            },
-                                            "\" -resource \"MyInstance\" -verbose"
+                                            "powershell.exe -ExecutionPolicy Unrestricted C:\\Users\\Administrator\\Downloads\\install-teradici.ps1 -verbose"
                                         ]
                                     ]
-                                }
+                                },
+                                "waitAfterCompletion": "forever"
                             }
                         }
                     },

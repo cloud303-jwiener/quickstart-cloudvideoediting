@@ -1,9 +1,13 @@
 [cmdletbinding()]
- Param()
+Param()
 
 try {
     $ErrorActionPreference = "Stop"
 
+
+    # why do I have to do this?
+    $env:path += ";C:\ProgramData\chocolatey\bin"
+    Write-Verbose "path = $env:path"
 
     Write-Verbose "Install blender"
     #
