@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "This template deploys the Cloud Video Editing Quick Start. **WARNING** This template creates Amazon EC2 Windows instance and related resources. You will be billed for the AWS resources used if you create a stack from this template.",
+    "Description": "This template deploys the Cloud Video Editing Quick Start. **WARNING** This template creates Amazon EC2 Windows instance and related resources. You will be billed for the AWS resources used if you create a stack from this template.  (qs-1npjhtsrr)",
     "Metadata": {
         "AWS::CloudFormation::Interface": {
             "ParameterGroups": [
@@ -346,6 +346,34 @@
             "Default": "10.0.0.0/16",
             "Description": "CIDR Block for the VPC",
             "Type": "String"
+        }
+    },
+    "Rules": {
+        "G3NotSupportedRegionsRule": {
+           "Assertions": [
+            {
+                "Assert": {
+                "Fn::Not": [
+                    {
+                        "Fn::Contains": [
+                            [
+                                "ap-northeast-2",
+                                "ap-south-1",
+                                "ca-central-1",
+                                "cn-northwest-1",
+                                "eu-west-2",
+                                "sa-east-1"
+                            ],
+                            {
+                                "Ref": "AWS::Region"
+                            }
+                        ]
+                    }
+                ]
+                },
+                "AssertDescription": "Amazon G3 instances are not currently supported in this region"
+            }
+        ]
         }
     },
     "Resources": {

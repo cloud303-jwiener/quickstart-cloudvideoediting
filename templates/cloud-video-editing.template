@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "This template deploys the Cloud Video Editing Quick Start. **WARNING** This template creates Amazon EC2 Windows instance and related resources. You will be billed for the AWS resources used if you create a stack from this template.",
+    "Description": "This template deploys the Cloud Video Editing Quick Start. **WARNING** This template creates Amazon EC2 Windows instance and related resources. You will be billed for the AWS resources used if you create a stack from this template. (qs-1npjhtss1)",
     "Metadata": {
         "AWS::CloudFormation::Interface": {
             "ParameterGroups": [
@@ -186,32 +186,17 @@
             "ap-northeast-1": {
                 "WS2016FULLBASE": "ami-4325fa25"
             },
-            "ap-northeast-2": {
-                "WS2016FULLBASE": "ami-4dfa5f23"
-            },
-            "ap-south-1": {
-                "WS2016FULLBASE": "ami-ac3370c3"
-            },
             "ap-southeast-1": {
                 "WS2016FULLBASE": "ami-ed067d8e"
             },
             "ap-southeast-2": {
                 "WS2016FULLBASE": "ami-42638120"
             },
-            "ca-central-1": {
-                "WS2016FULLBASE": "ami-87f44ce3"
-            },
             "eu-central-1": {
                 "WS2016FULLBASE": "ami-5b7ac534"
             },
             "eu-west-1": {
                 "WS2016FULLBASE": "ami-b7e93bce"
-            },
-            "eu-west-2": {
-                "WS2016FULLBASE": "ami-06bcae62"
-            },
-            "sa-east-1": {
-                "WS2016FULLBASE": "ami-f14a349d"
             },
             "us-east-1": {
                 "WS2016FULLBASE": "ami-e3bb7399"
@@ -297,7 +282,7 @@
         "EditHostSecurityGroup": {
             "Type": "AWS::EC2::SecurityGroup",
             "Properties": {
-                "GroupDescription": "ssh and web",
+                "GroupDescription": "ssh and rdp",
                 "SecurityGroupIngress": [
                     {
                         "IpProtocol": "tcp",
@@ -482,41 +467,6 @@
                                     ]
                                 },
                                 "waitAfterCompletion": "forever"
-                            }
-                        }
-                    },
-                    "installRDS": {
-                        "commands": {
-                            "a-install-rds": {
-                                "command": {
-                                    "Fn::Join": [
-                                        "",
-                                        [
-                                            "powershell.exe -Command \"Install-WindowsFeature RDS-Gateway,RSAT-RDS-Gateway\""
-                                        ]
-                                    ]
-                                },
-                                "waitAfterCompletion": "0"
-                            },
-                            "b-configure-rdgw": {
-                                "command": {
-                                    "Fn::Join": [
-                                        "",
-                                        [
-                                            "powershell.exe -ExecutionPolicy RemoteSigned ",
-                                            "C:\\cfn\\scripts\\Initialize-RDGW.ps1 -ServerFQDN $($env:COMPUTERNAME + '.",
-                                            {
-                                                "Ref": "DomainDNSName"
-                                            },
-                                            "') -DomainNetBiosName ",
-                                            {
-                                                "Ref": "DomainNetBIOSName"
-                                            },
-                                            " -GroupName 'domain admins'"
-                                        ]
-                                    ]
-                                },
-                                "waitAfterCompletion": "0"
                             }
                         }
                     },
