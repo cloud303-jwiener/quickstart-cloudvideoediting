@@ -506,7 +506,8 @@
                                             "powershell.exe -ExecutionPolicy Unrestricted C:\\Users\\Administrator\\Downloads\\install-packages.ps1"
                                         ]
                                     ]
-                                }
+                                },
+                                "waitAfterCompletion": "0"
                             },
                             "05-install-video-editor": {
                                 "command": {
@@ -516,7 +517,8 @@
                                             "powershell.exe -ExecutionPolicy Unrestricted C:\\Users\\Administrator\\Downloads\\install-video-editor.ps1"
                                         ]
                                     ]
-                                }
+                                },
+                                "waitAfterCompletion": "0"
                             },
                             "10-install-gpu-drivers": {
                                 "command": {

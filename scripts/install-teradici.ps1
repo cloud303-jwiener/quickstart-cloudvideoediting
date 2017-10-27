@@ -7,12 +7,6 @@ param(
     [string]$Destination = 'C:\cfn\downloads\PCoIP_agent_release_installer_2.8.0.6123_graphics.exe'
 )
 
-#
-# to install a teradici license:
-#
-#           'C:\Program Files (x86)\Teradici\PCoIP Agent\pcoip-register-host.ps1' -RegistrationCode '<YourRegistratonCode>'
-#
-
 try {
     $ErrorActionPreference = "Stop"
 
@@ -59,7 +53,6 @@ try {
        #  when run in powershell, $HOME AND $env:USERPROFILE both return:
        #    C:\Users\Administrator
        #
-       whoami
        $desktopPath = "C:\Users\Administrator\Desktop\pcoip_control_panel.lnk"
        Write-Verbose "shortcut path = $desktopPath"
        $Shortcut = $WshShell.CreateShortcut($desktopPath)
