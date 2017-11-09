@@ -1,5 +1,5 @@
 global:
-  marketplace-ami: false
+  marketplace-ami: true
   owner: quickstart-eng@amazon.com
   qsname: quickstart-cloudvideoediting
   regions:
