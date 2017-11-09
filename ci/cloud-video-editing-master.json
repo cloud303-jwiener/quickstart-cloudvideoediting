@@ -5,7 +5,7 @@
     },
     {
         "ParameterKey": "DomainAdminUser",
-        "ParameterValue": "EditAdmU01"
+        "ParameterValue": "Admin"
     },
     {
         "ParameterKey": "DomainAdminPassword",

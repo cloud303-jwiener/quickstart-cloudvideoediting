@@ -383,6 +383,7 @@
                     "configSets": {
                         "config": [
                             "setup",
+                            "joinDomain",
                             "configVideoEditor",
                             "finalize"
                         ]
@@ -439,7 +440,7 @@
                             }
                         }
                     },
-                    "join": {
+                    "joinDomain": {
                         "commands": {
                             "a-join-domain": {
                                 "command": {
