@@ -473,25 +473,25 @@
                     },
                     "configVideoEditor": {
                         "files": {
-                            "c:\\Users\\Administrator\\Downloads\\install-packages.ps1": {
+                            "C:\\cfn\\scripts\\install-packages.ps1": {
                                 "source": {
                                     "Fn::Sub": "https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}scripts/install-packages.ps1"
                                 },
                                 "authentication": "S3AccessCreds"
                             },
-                            "c:\\Users\\Administrator\\Downloads\\install-video-editor.ps1": {
+                            "C:\\cfn\\scripts\\install-video-editor.ps1": {
                                 "source": {
                                     "Fn::Sub": "https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}scripts/install-video-editor.ps1"
                                 },
                                 "authentication": "S3AccessCreds"
                             },
-                            "c:\\Users\\Administrator\\Downloads\\install-teradici.ps1": {
+                            "C:\\cfn\\scripts\\install-teradici.ps1": {
                                 "source": {
                                     "Fn::Sub": "https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}scripts/install-teradici.ps1"
                                 },
                                 "authentication": "S3AccessCreds"
                             },
-                            "c:\\Users\\Administrator\\Downloads\\install-gpu-drivers.ps1": {
+                            "C:\\cfn\\scripts\\install-gpu-drivers.ps1": {
                                 "source": {
                                     "Fn::Sub": "https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}scripts/install-gpu-drivers.ps1"
                                 },
@@ -504,40 +504,40 @@
                                     "Fn::Join": [
                                         "",
                                         [
-                                            "powershell.exe -ExecutionPolicy Unrestricted C:\\Users\\Administrator\\Downloads\\install-packages.ps1"
+                                            "powershell.exe -ExecutionPolicy Unrestricted C:\\cfn\\scripts\\install-packages.ps1"
                                         ]
                                     ]
                                 },
                                 "waitAfterCompletion": "0"
                             },
-                            "05-install-video-editor": {
+                            "02-install-video-editor": {
                                 "command": {
                                     "Fn::Join": [
                                         "",
                                         [
-                                            "powershell.exe -ExecutionPolicy Unrestricted C:\\Users\\Administrator\\Downloads\\install-video-editor.ps1"
+                                            "powershell.exe -ExecutionPolicy Unrestricted C:\\cfn\\scripts\\install-video-editor.ps1"
                                         ]
                                     ]
                                 },
                                 "waitAfterCompletion": "0"
                             },
-                            "10-install-gpu-drivers": {
+                            "03-install-gpu-drivers": {
                                 "command": {
                                     "Fn::Join": [
                                         "",
                                         [
-                                            "powershell.exe -ExecutionPolicy Unrestricted C:\\Users\\Administrator\\Downloads\\install-gpu-drivers.ps1 -verbose"
+                                            "powershell.exe -ExecutionPolicy Unrestricted C:\\cfn\\scripts\\install-gpu-drivers.ps1 -verbose"
                                         ]
                                     ]
                                 },
                                 "waitAfterCompletion": "forever"
                             },
-                            "15-install-teradici": {
+                            "04-install-teradici": {
                                 "command": {
                                     "Fn::Join": [
                                         "",
                                         [
-                                            "powershell.exe -ExecutionPolicy Unrestricted C:\\Users\\Administrator\\Downloads\\install-teradici.ps1 -verbose"
+                                            "powershell.exe -ExecutionPolicy Unrestricted C:\\cfn\\scripts\\install-teradici.ps1 -verbose"
                                         ]
                                     ]
                                 },
