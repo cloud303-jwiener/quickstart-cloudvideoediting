@@ -49,6 +49,7 @@ try {
     Write-Verbose "shortcut path = $desktopPath"
     $Shortcut = $WshShell.CreateShortcut($desktopPath)
     $Shortcut.TargetPath = "C:\Program Files\Blender Foundation\Blender\blender.exe"
+    $Shortcut.WorkingDirectory = "c:\Program Files\Blender Foundation\Blender"
     $Shortcut.Save()
     Write-Verbose "Blender install complete"
 
