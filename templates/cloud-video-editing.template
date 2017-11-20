@@ -199,7 +199,7 @@
                 "WS2016FULLBASE": "ami-b7e93bce"
             },
             "us-east-1": {
-                "WS2016FULLBASE": "ami-e3bb7399"
+                "WS2016FULLBASE": "ami-2e0aa654"
             },
             "us-east-2": {
                 "WS2016FULLBASE": "ami-77765a12"
@@ -228,20 +228,6 @@
                                     "Resource": {
                                         "Fn::Sub": "arn:aws:s3:::${QSS3BucketName}/${QSS3KeyPrefix}*"
                                     },
-                                    "Effect": "Allow"
-                                },
-                                {
-                                    "Action": [
-                                        "s3:ListBucket"
-                                    ],
-                                    "Resource": "arn:aws:s3:::ec2-windows-nvidia-drivers",
-                                    "Effect": "Allow"
-                                },
-                                {
-                                    "Action": [
-                                        "s3:GetObject"
-                                    ],
-                                    "Resource": "arn:aws:s3:::ec2-windows-nvidia-drivers/*",
                                     "Effect": "Allow"
                                 }
                             ]
@@ -383,7 +369,6 @@
                     "configSets": {
                         "config": [
                             "setup",
-                            "joinDomain",
                             "configVideoEditor",
                             "finalize"
                         ]
@@ -490,12 +475,6 @@
                                     "Fn::Sub": "https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}scripts/install-teradici.ps1"
                                 },
                                 "authentication": "S3AccessCreds"
-                            },
-                            "C:\\cfn\\scripts\\install-gpu-drivers.ps1": {
-                                "source": {
-                                    "Fn::Sub": "https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}scripts/install-gpu-drivers.ps1"
-                                },
-                                "authentication": "S3AccessCreds"
                             }
                         },
                         "commands": {
@@ -520,17 +499,6 @@
                                     ]
                                 },
                                 "waitAfterCompletion": "0"
-                            },
-                            "03-install-gpu-drivers": {
-                                "command": {
-                                    "Fn::Join": [
-                                        "",
-                                        [
-                                            "powershell.exe -ExecutionPolicy Unrestricted C:\\cfn\\scripts\\install-gpu-drivers.ps1 -verbose"
-                                        ]
-                                    ]
-                                },
-                                "waitAfterCompletion": "forever"
                             },
                             "04-install-teradici": {
                                 "command": {
