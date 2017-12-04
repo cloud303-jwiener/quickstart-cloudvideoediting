@@ -53,6 +53,20 @@ try {
     $Shortcut.Save()
     Write-Verbose "Blender install complete"
 
+    # startup dir doesn't exist unless you've saved a startup file first, create it
+    mkdir "C:\Users\Administrator\AppData\Roaming\Blender Foundation\Blender"
+
+    # find the blender version number ... it's in the path for the config
+    cd "C:\Program Files\Blender Foundation\Blender"
+    $dir = gci -ErrorAction SilentlyContinue -recurse -filter "datafiles"
+    $configDir = "C:\Users\Administrator\AppData\Roaming\Blender Foundation\Blender\$($dir.Parent)\config"
+    mkdir $configDir
+    Write-Verbose "created $($configDir)"
+    cp "c:\cfn\scripts\startup.blend" "C:\Users\Administrator\AppData\Roaming\Blender Foundation\Blender\$($dir.Parent)\config\startup.blend"
+    Write-Verbose "Wrote startup.blend to $($dir.Parent)\config\startup.blend"
+
+
+
     # download a video file that can be loaded into the editor
     downloadFile $bigbuckSourceUrl $bigbuckDestFilename
 }

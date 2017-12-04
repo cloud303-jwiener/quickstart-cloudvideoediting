@@ -184,31 +184,31 @@
                 "WS2016FULLG3": "Windows_Server-2016-English-Full-G3-2017.10.13-5789cac1-7877-4a28-b548-0cec6187b848-ami-eea36b94.4"
             },
             "ap-northeast-1": {
-                "WS2016FULLG3": "ami-ca812cac"
+                "WS2016FULLG3": "ami-d4e548b2"
             },
             "ap-southeast-1": {
-                "WS2016FULLG3": "ami-11c18372"
+                "WS2016FULLG3": "ami-356e2c56"
             },
             "ap-southeast-2": {
-                "WS2016FULLG3": "ami-3cb45a5e"
+                "WS2016FULLG3": "ami-495ab52b"
             },
             "eu-central-1": {
-                "WS2016FULLG3": "ami-b3fe7bdc"
+                "WS2016FULLG3": "ami-3ed45151"
             },
             "eu-west-1": {
-                "WS2016FULLG3": "ami-d652f4af"
+                "WS2016FULLG3": "ami-bba305c2"
             },
             "us-east-1": {
-                "WS2016FULLG3": "ami-1bca6461"
+                "WS2016FULLG3": "ami-2e0aa654"
             },
             "us-east-2": {
-                "WS2016FULLG3": "ami-3d2f0058"
+                "WS2016FULLG3": "ami-705d7215"
             },
             "us-west-1": {
-                "WS2016FULLG3": "ami-ad88b4cd"
+                "WS2016FULLG3": "ami-42a89422"
             },
             "us-west-2": {
-                "WS2016FULLG3": "ami-b302cacb"
+                "WS2016FULLG3": "ami-2ca16954"
             }
         }
     },
@@ -475,7 +475,14 @@
                                     "Fn::Sub": "https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}scripts/install-teradici.ps1"
                                 },
                                 "authentication": "S3AccessCreds"
+                            },
+                            "c:\\cfn\\scripts\\startup.blend": {
+                                "source": {
+                                    "Fn::Sub": "https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}scripts/big-buck-bunny.blend"
+                                },
+                                "authentication": "S3AccessCreds"
                             }
+
                         },
                         "commands": {
                             "01-install-packages": {
