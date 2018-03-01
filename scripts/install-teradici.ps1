@@ -46,21 +46,11 @@ try {
        # create shortcut to teradici control panel
        #
        $WshShell = New-Object -comObject WScript.Shell
-       #
-       # Write-Verbose "Home = $env:USERPROFILE"
-       # for 2016 when run via cfn-init:
-       #    $env:USERPROFILE returns 'C:\Windows\system32\config\systemprofile'
-       #  when run in powershell, $HOME AND $env:USERPROFILE both return:
-       #    C:\Users\Administrator
-       #
        $desktopPath = "C:\Users\Administrator\Desktop\pcoip_control_panel.lnk"
        Write-Verbose "shortcut path = $desktopPath"
        $Shortcut = $WshShell.CreateShortcut($desktopPath)
        $Shortcut.TargetPath = "C:\Program Files (x86)\Teradici\PCoIP Agent\bin\pcoip_control_panel.exe"
        $Shortcut.Save()
-
-       # we don't allow Teradici to reboot after install or else the above shortcut would get interrupted
-       Restart-Computer
     } else {
         throw "Problem installing Teradici, not .exe extension"
     }

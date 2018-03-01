@@ -6,7 +6,7 @@
             "ParameterGroups": [
                 {
                     "Label": {
-                        "default": "Network Configuration"
+                        "default": "Network configuration"
                     },
                     "Parameters": [
                         "VPCID",
@@ -16,11 +16,12 @@
                 },
                 {
                     "Label": {
-                        "default": "Amazon EC2 Configuration"
+                        "default": "Amazon EC2 configuration"
                     },
                     "Parameters": [
                         "EditHostInstanceType",
                         "NumberOfEditHosts",
+                        "EBSVolumeSize",
                         "EditHostAccessCIDR",
                         "KeyPairName"
                     ]
@@ -38,7 +39,7 @@
                 },
                 {
                     "Label": {
-                        "default": "AWS Quick Start Configuration"
+                        "default": "AWS Quick Start configuration"
                     },
                     "Parameters": [
                         "QSS3BucketName",
@@ -62,8 +63,11 @@
                 "DomainNetBIOSName": {
                     "default": "Domain NetBIOS Name"
                 },
+                "EBSVolumeSize": {
+                    "Default": "EBS Volume size for EC2 instance"
+                },
                 "EditHostInstanceType": {
-                    "default": "Edit Host Instance Type (GPU is necessary)"
+                    "default": "Edit Host Instance Type"
                 },
                 "EditHostAccessCIDR": {
                     "default": "CIDR to restrict access to edit host"
@@ -110,8 +114,8 @@
             "AllowedPattern": "[a-zA-Z0-9]+\\..+",
             "Default": "example.com",
             "Description": "Fully qualified domain name (FQDN) of the forest root domain e.g. corp.example.com",
-            "MaxLength": "25",
-            "MinLength": "3",
+            "MaxLength": "255",
+            "MinLength": "2",
             "Type": "String"
         },
         "DomainMemberSGID": {
@@ -126,6 +130,14 @@
             "MinLength": "1",
             "Type": "String"
         },
+        "EBSVolumeSize": {
+            "AllowedPattern": "[0-9]+",
+            "Default": "50",
+            "Description": "EBS Volume size for EC2 host.",
+            "MaxLength": "4",
+            "MinLength": "1",
+            "Type": "String"
+        },
         "EditHostInstanceType": {
             "AllowedValues": [
                 "g3.4xlarge",
@@ -133,7 +145,7 @@
                 "g3.16xlarge"
             ],
             "Default": "g3.4xlarge",
-            "Description": "Amazon EC2 instance type for the Edit Host",
+            "Description": "Which GPU instance type for the Edit Host (necessary for accelerated video editing performance)",
             "Type": "String"
         },
         "EditHostAccessCIDR": {
@@ -212,6 +224,38 @@
             }
         }
     },
+    "Rules": {
+        "SubnetsInVPC": {
+            "Assertions": [
+                {
+                    "Assert": {
+                        "Fn::EachMemberIn": [
+                            {
+                                "Fn::ValueOfAll": [
+                                    "AWS::EC2::Subnet::Id",
+                                    "VpcId"
+                                ]
+                            },
+                            {
+                                "Fn::RefAll": "AWS::EC2::VPC::Id"
+                            }
+                        ]
+                    },
+                    "AssertDescription": "All subnets must be in the VPC"
+                }
+            ]
+        }
+    },
+    "Conditions": {
+        "GovCloudCondition": {
+            "Fn::Equals": [
+                {
+                    "Ref": "AWS::Region"
+                },
+                "us-gov-west-1"
+            ]
+        }
+    },
     "Resources": {
         "VideoEditingRole": {
             "Type": "AWS::IAM::Role",
@@ -274,8 +318,8 @@
                         "IpProtocol": "tcp",
                         "FromPort": "3389",
                         "ToPort": "3389",
-                        "CidrIp": {
-                            "Ref": "EditHostAccessCIDR"
+                        "SourceSecurityGroupId": {
+                            "Ref": "DomainMemberSGID"
                         }
                     },
                     {
@@ -391,7 +435,23 @@
                                 "source": {
                                     "Fn::Sub": "https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}submodules/quickstart-microsoft-utilities/scripts/Join-Domain.ps1"
                                 },
-                                "authentication": "S3AccessCreds"
+                                "authentication": "S3AccessCreds",
+                            "C:\\cfn\\scripts\\Restart-Computer.ps1": {
+                                    "source": {
+                                        "Fn::Sub": [
+                                            "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}submodules/quickstart-microsoft-utilities/scripts/Restart-Computer.ps1",
+                                            {
+                                                "QSS3Region": {
+                                                    "Fn::If": [
+                                                        "GovCloudCondition",
+                                                        "s3-us-gov-west-1",
+                                                        "s3"
+                                                    ]
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
                             }
                         },
                         "commands": {
@@ -507,17 +567,22 @@
                                 },
                                 "waitAfterCompletion": "0"
                             },
-                            "04-install-teradici": {
+                            "03-install-teradici": {
                                 "command": {
                                     "Fn::Join": [
                                         "",
                                         [
-                                            "powershell.exe -ExecutionPolicy Unrestricted C:\\cfn\\scripts\\install-teradici.ps1 -verbose"
+                                            "powershell.exe -ExecutionPolicy Unrestricted C:\\cfn\\scripts\\install-teradici.ps1"
                                         ]
                                     ]
                                 },
+                                "waitAfterCompletion": "0"
+                            },
+                            "04-reboot": {
+                                "command": "powershell.exe -Command \"C:\\cfn\\scripts\\Restart-Computer.ps1\"",
                                 "waitAfterCompletion": "forever"
                             }
+
                         }
                     },
                     "finalize": {
@@ -558,7 +623,7 @@
                     {
                         "DeviceName": "/dev/sda1",
                         "Ebs": {
-                            "VolumeSize": "50",
+                            "VolumeSize": { "Ref": "EBSVolumeSize" },
                             "VolumeType": "gp2"
                         }
                     }
