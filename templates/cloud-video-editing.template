@@ -192,34 +192,34 @@
     "Mappings": {
         "AWSAMIRegionMap": {
             "AMI": {
-                "WS2016FULLG3": "Windows_Server-2016-English-Full-G3-2018.01.12-42c739bf-b97a-49e3-b349-4f02b42272cf-ami-ca3d1ab0.4"
+                "WS2016FULLG3": "Windows_Server-2016-English-Full-G3-2018.02.23-42c739bf-b97a-49e3-b349-4f02b42272cf-ami-1349a56e.4"
             },
             "ap-northeast-1": {
-                "WS2016FULLG3": "ami-aebad6c8"
+                "WS2016FULLG3": "ami-4f85c329"
             },
             "ap-southeast-1": {
-                "WS2016FULLG3": "ami-996e15e5"
+                "WS2016FULLG3": "ami-e71d569b"
             },
             "ap-southeast-2": {
-                "WS2016FULLG3": "ami-c559a7a7"
+                "WS2016FULLG3": "ami-94db1df6"
             },
             "eu-central-1": {
-                "WS2016FULLG3": "ami-089b0367"
+                "WS2016FULLG3": "ami-3d92ff52"
             },
             "eu-west-1": {
-                "WS2016FULLG3": "ami-be87e1c7"
+                "WS2016FULLG3": "ami-2573365c"
             },
             "us-east-1": {
-                "WS2016FULLG3": "ami-6bddef11"
+                "WS2016FULLG3": "ami-d50ee5a8"
             },
             "us-east-2": {
-                "WS2016FULLG3": "ami-3c6b5e59"
+                "WS2016FULLG3": "ami-edfdca88"
             },
             "us-west-1": {
-                "WS2016FULLG3": "ami-5ebdb03e"
+                "WS2016FULLG3": "ami-e7e6ed87"
             },
             "us-west-2": {
-                "WS2016FULLG3": "ami-9e02bde6"
+                "WS2016FULLG3": "ami-c99e16b1"
             }
         }
     },
@@ -521,7 +521,6 @@
                                 },
                                 "authentication": "S3AccessCreds"
                             }
-
                         },
                         "commands": {
                             "01-install-packages": {
@@ -561,7 +560,6 @@
                                 "command": "powershell.exe -Command \"C:\\cfn\\scripts\\Restart-Computer.ps1\"",
                                 "waitAfterCompletion": "forever"
                             }
-
                         }
                     },
                     "finalize": {
@@ -602,7 +600,9 @@
                     {
                         "DeviceName": "/dev/sda1",
                         "Ebs": {
-                            "VolumeSize": { "Ref": "EBSVolumeSize" },
+                            "VolumeSize": {
+                                "Ref": "EBSVolumeSize"
+                            },
                             "VolumeType": "gp2"
                         }
                     }
