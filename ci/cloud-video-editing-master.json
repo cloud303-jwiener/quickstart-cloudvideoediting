@@ -21,7 +21,7 @@
     },
     {
         "ParameterKey": "RestoreModePassword",
-        "ParameterValue": "Test2017A$"
+        "ParameterValue": "$[alfred_genpass_32]"
     },
     {
         "ParameterKey": "RDGWCIDR",

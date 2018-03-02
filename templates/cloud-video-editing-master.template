@@ -377,7 +377,7 @@
                         "Ref": "QSS3BucketName"
                     },
                     "QSS3KeyPrefix": {
-                        "Ref": "QSS3KeyPrefix"
+                        "Fn::Sub": "${QSS3KeyPrefix}submodules/quickstart-microsoft-activedirectory/"
                     },
                     "VPCID": {
                         "Fn::GetAtt": [
