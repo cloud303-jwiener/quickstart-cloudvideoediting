@@ -64,7 +64,7 @@
                     "default": "Domain NetBIOS Name"
                 },
                 "EBSVolumeSize": {
-                    "Default": "EBS Volume size for EC2 instance"
+                    "default": "EBS Volume size for EC2 instance"
                 },
                 "EditHostInstanceType": {
                     "default": "Edit Host Instance Type"
