@@ -1,10 +1,10 @@
 [CmdletBinding()]
 param(
     [Parameter(Mandatory=$false)]
-    [string]$Source = 'https://fileshare.teradici.com/s/50MC5kGr3YoCjgG/download',
+    [string]$Source = 'https://downloads.teradici.com/win/stable/PCoIP_agent_release_installer_graphics.exe',
 
     [Parameter(Mandatory=$false)]
-    [string]$Destination = 'C:\cfn\downloads\PCoIP_agent_release_installer_2.8.0.6123_graphics.exe'
+    [string]$Destination = 'C:\cfn\downloads\PCoIP_agent_release_installer_graphics.exe'
 )
 
 try {
