@@ -407,6 +407,14 @@
                         ]
                     },
                     "setup": {
+                        "services": {
+                            "windows" : {
+                                "Audiosrv" : {
+                                    "ensureRunning" : "true",
+                                    "enabled" : "true"
+                                }
+                            }
+                        },
                         "files": {
                             "C:\\cfn\\scripts\\Unzip-Archive.ps1": {
                                 "source": {
