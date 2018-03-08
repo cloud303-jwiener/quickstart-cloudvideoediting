@@ -42,30 +42,11 @@ try {
     #
     choco install --limit-output -y blender
 
-    # create a shortcut to blender on the desktop
-    #
-    $WshShell = New-Object -comObject WScript.Shell
-    $desktopPath = "C:\Users\Administrator\Desktop\Blender.lnk"
-    Write-Verbose "shortcut path = $desktopPath"
-    $Shortcut = $WshShell.CreateShortcut($desktopPath)
-    $Shortcut.TargetPath = "C:\Program Files\Blender Foundation\Blender\blender.exe"
-    $Shortcut.WorkingDirectory = "c:\Program Files\Blender Foundation\Blender"
-    $Shortcut.Save()
-    Write-Verbose "Blender install complete"
+    # remove the blender exe shortcut, it will be confused with our startup file below
+    Remove-Item 'C:\Users\Administrator\Desktop\Blender.lnk'
 
-    # startup dir doesn't exist unless you've saved a startup file first, create it
-    mkdir "C:\Users\Administrator\AppData\Roaming\Blender Foundation\Blender"
-
-    # find the blender version number ... it's in the path for the config
-    cd "C:\Program Files\Blender Foundation\Blender"
-    $dir = gci -ErrorAction SilentlyContinue -recurse -filter "datafiles"
-    $configDir = "C:\Users\Administrator\AppData\Roaming\Blender Foundation\Blender\$($dir.Parent)\config"
-    mkdir $configDir
-    Write-Verbose "created $($configDir)"
-    cp "c:\cfn\scripts\startup.blend" "C:\Users\Administrator\AppData\Roaming\Blender Foundation\Blender\$($dir.Parent)\config\startup.blend"
-    Write-Verbose "Wrote startup.blend to $($dir.Parent)\config\startup.blend"
-
-
+    # this startup file configures a timeline view, typical of a video editor.
+    cp "c:\cfn\scripts\startup.blend" "C:\Users\Administrator\Desktop\blender.blend"
 
     # download a video file that can be loaded into the editor
     downloadFile $bigbuckSourceUrl $bigbuckDestFilename
