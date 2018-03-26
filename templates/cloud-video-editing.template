@@ -192,34 +192,34 @@
     "Mappings": {
         "AWSAMIRegionMap": {
             "AMI": {
-                "WS2016FULLG3": "Windows_Server-2016-English-Full-G3-2018.02.23-42c739bf-b97a-49e3-b349-4f02b42272cf-ami-1349a56e.4"
+                "WS2016FULLG3": "Windows_Server-2016-English-Full-G3-2018.03.06-42c739bf-b97a-49e3-b349-4f02b42272cf-ami-eb966a96.4"
             },
             "ap-northeast-1": {
-                "WS2016FULLG3": "ami-4f85c329"
+                "WS2016FULLG3": "ami-a47a2ec2"
             },
             "ap-southeast-1": {
-                "WS2016FULLG3": "ami-e71d569b"
+                "WS2016FULLG3": "ami-1a6e3d66"
             },
             "ap-southeast-2": {
-                "WS2016FULLG3": "ami-94db1df6"
+                "WS2016FULLG3": "ami-36b47654"
             },
             "eu-central-1": {
-                "WS2016FULLG3": "ami-3d92ff52"
+                "WS2016FULLG3": "ami-e6cb9d0d"
             },
             "eu-west-1": {
-                "WS2016FULLG3": "ami-2573365c"
+                "WS2016FULLG3": "ami-1668236f"
             },
             "us-east-1": {
-                "WS2016FULLG3": "ami-d50ee5a8"
+                "WS2016FULLG3": "ami-6901ce14"
             },
             "us-east-2": {
-                "WS2016FULLG3": "ami-edfdca88"
+                "WS2016FULLG3": "ami-49af992c"
             },
             "us-west-1": {
-                "WS2016FULLG3": "ami-e7e6ed87"
+                "WS2016FULLG3": "ami-fd8d999d"
             },
             "us-west-2": {
-                "WS2016FULLG3": "ami-c99e16b1"
+                "WS2016FULLG3": "ami-8cf163f4"
             }
         }
     },
@@ -408,10 +408,10 @@
                     },
                     "setup": {
                         "services": {
-                            "windows" : {
-                                "Audiosrv" : {
-                                    "ensureRunning" : "true",
-                                    "enabled" : "true"
+                            "windows": {
+                                "Audiosrv": {
+                                    "ensureRunning": "true",
+                                    "enabled": "true"
                                 }
                             }
                         },
