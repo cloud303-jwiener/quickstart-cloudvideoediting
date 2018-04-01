@@ -17,7 +17,7 @@ You can also use the CloudFormation templates as a starting point for your own i
 ![Quick Start architecture for a cloud video editing environment on AWS](https://d0.awsstatic.com/partner-network/QuickStart/datasheets/cloud-video-editing-architecture-on-aws.png)
 
 For architectural details, best practices, step-by-step instructions, and customization options, see the 
-[deployment guide](https://s3.amazonaws.com/quickstart-reference/cloudvideoediting/latest/doc/cloud-video-editing-on-the-aws-cloud.pdf).
+[deployment guide](https://fwd.aws/4A4Ab).
 
 To post feedback, submit feature ideas, or report bugs, use the **Issues** section of this GitHub repo.
 If you'd like to submit code for this Quick Start, please review the [AWS Quick Start Contributor's Kit](https://aws-quickstart.github.io/). 
