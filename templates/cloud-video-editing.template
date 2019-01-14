@@ -192,34 +192,34 @@
     "Mappings": {
         "AWSAMIRegionMap": {
             "AMI": {
-                "WS2016FULLG3": "Windows_Server-2016-English-Full-G3-2018.10.14-42c739bf-b97a-49e3-b349-4f02b42272cf-ami-0b09724182958a452.4"
+                "WS2016FULLG3": "Windows_Server-2016-English-Full-G3-2018.12.12-42c739bf-b97a-49e3-b349-4f02b42272cf-ami-0b17cdcefbdf7c104.4"
             },
             "ap-northeast-1": {
-                "WS2016FULLG3": "ami-0e3182613fcb07454"
+                "WS2016FULLG3": "ami-0791a41f13281831a"
             },
             "ap-southeast-1": {
-                "WS2016FULLG3": "ami-0aeb811d04770788e"
+                "WS2016FULLG3": "ami-062a33c56cb041df6"
             },
             "ap-southeast-2": {
-                "WS2016FULLG3": "ami-0bbc8aceca69e09fb"
+                "WS2016FULLG3": "ami-0caae6fd5f435c684"
             },
             "eu-central-1": {
-                "WS2016FULLG3": "ami-071e7756dcc06617e"
+                "WS2016FULLG3": "ami-098cca1712762f47c"
             },
             "eu-west-1": {
-                "WS2016FULLG3": "ami-06fa879bd783c701a"
+                "WS2016FULLG3": "ami-0b7aa873de1945175"
             },
             "us-east-1": {
-                "WS2016FULLG3": "ami-0743ab72a7d66de8b"
+                "WS2016FULLG3": "ami-03f87e3ab0d0fdd24"
             },
             "us-east-2": {
-                "WS2016FULLG3": "ami-0fbe7e2d8ea8f81bf"
+                "WS2016FULLG3": "ami-0c40a173824873d21"
             },
             "us-west-1": {
-                "WS2016FULLG3": "ami-0bfef40a34cbed982"
+                "WS2016FULLG3": "ami-06cfc637edb5e86bf"
             },
             "us-west-2": {
-                "WS2016FULLG3": "ami-0c00fd3596e8ae0db"
+                "WS2016FULLG3": "ami-01b5181b846a88b5d"
             }
         }
     },
