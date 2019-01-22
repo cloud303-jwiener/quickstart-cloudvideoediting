@@ -14,6 +14,6 @@ global:
     - us-west-2
   reporting: true
 tests:
-  master:
+  cloud-videoediting:
     parameter_input: cloud-video-editing-master.json
     template_file: cloud-video-editing-master.template
