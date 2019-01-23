@@ -378,7 +378,7 @@
                     "Count": {
                         "Ref": "NumberOfEditHosts"
                     },
-                    "Timeout": "PT30M"
+                    "Timeout": "PT60M"
                 }
             }
         },
