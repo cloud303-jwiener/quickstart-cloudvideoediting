@@ -48,8 +48,9 @@ try {
     # this startup file configures a timeline view, typical of a video editor.
     cp "c:\cfn\scripts\startup.blend" "C:\Users\Administrator\Desktop\blender.blend"
 
-    # download a video file that can be loaded into the editor
-    downloadFile $bigbuckSourceUrl $bigbuckDestFilename
+    # download a demo video file that can be loaded into the editor
+    # commented out as it is not needed as a core within the QS - this was also causing timeouts as the download was too large
+    # downloadFile $bigbuckSourceUrl $bigbuckDestFilename
 }
 catch {
     Write-Verbose "catch: $_"
