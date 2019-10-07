@@ -6,7 +6,7 @@
             "ParameterGroups": [
                 {
                     "Label": {
-                        "default": "Network Configuration"
+                        "default": "Network configuration"
                     },
                     "Parameters": [
                         "AvailabilityZones",
@@ -15,22 +15,24 @@
                         "PrivateSubnet2CIDR",
                         "PublicSubnet1CIDR",
                         "PublicSubnet2CIDR",
-                        "RDGWCIDR"
+                        "RDGWCIDR",
+                        "EditHostAccessCIDR"
                     ]
                 },
                 {
                     "Label": {
-                        "default": "Amazon EC2 Configuration"
+                        "default": "Amazon EC2 configuration"
                     },
                     "Parameters": [
                         "KeyPairName",
                         "RDGWInstanceType",
+                        "EditHostInstanceType",
                         "NumberOfEditHosts"
                     ]
                 },
                 {
                     "Label": {
-                        "default": "Microsoft Active Directory Configuration"
+                        "default": "Microsoft Active Directory configuration"
                     },
                     "Parameters": [
                         "DomainDNSName",
@@ -42,7 +44,7 @@
                 },
                 {
                     "Label": {
-                        "default": "Microsoft Remote Desktop Gateway Configuration"
+                        "default": "Microsoft Remote Desktop gateway configuration"
                     },
                     "Parameters": [
                         "NumberOfRDGWHosts"
@@ -50,7 +52,7 @@
                 },
                 {
                     "Label": {
-                        "default": "AWS Quick Start Configuration"
+                        "default": "AWS Quick Start configuration"
                     },
                     "Parameters": [
                         "QSS3BucketName",
@@ -63,46 +65,58 @@
                     "default": "Availability Zones"
                 },
                 "DomainAdminUser": {
-                    "default": "Admin"
+                    "default": "Domain admin user name"
                 },
                 "DomainAdminPassword": {
-                    "default": "Domain Admin Password"
+                    "default": "Domain admin password"
                 },
                 "DomainDNSName": {
-                    "default": "Domain DNS Name"
+                    "default": "Domain DNS name"
                 },
                 "DomainNetBIOSName": {
-                    "default": "Domain NetBIOS Name"
+                    "default": "Domain NetBIOS name"
+                },
+                "EditHostAccessCIDR": {
+                    "default": "Edit Host external access CIDR"
+                },
+                "EditHostInstanceType": {
+                    "default": "Edit Host instance type"
                 },
                 "KeyPairName": {
-                    "default": "Key Pair Name"
+                    "default": "Key pair name"
+                },
+                "NumberOfEditHosts": {
+                    "default": "Number of Edit Hosts"
+                },
+                "NumberOfRDGWHosts": {
+                    "default": "Number of Remote Desktop gateway hosts"
                 },
                 "PrivateSubnet1CIDR": {
-                    "default": "Private Subnet 1 CIDR"
+                    "default": "Private subnet 1 CIDR"
                 },
                 "PrivateSubnet2CIDR": {
-                    "default": "Private Subnet 2 CIDR"
+                    "default": "Private subnet 2 CIDR"
                 },
                 "PublicSubnet1CIDR": {
-                    "default": "Public Subnet 1 CIDR"
+                    "default": "Public subnet 1 CIDR"
                 },
                 "PublicSubnet2CIDR": {
-                    "default": "Public Subnet 2 CIDR"
+                    "default": "Public subnet 2 CIDR"
                 },
                 "QSS3BucketName": {
-                    "default": "Quick Start S3 Bucket Name"
+                    "default": "Quick Start S3 bucket name"
                 },
                 "QSS3KeyPrefix": {
-                    "default": "Quick Start S3 Key Prefix"
+                    "default": "Quick Start S3 key prefix"
                 },
                 "RDGWCIDR": {
-                    "default": "Allowed Remote Desktop Gateway External Access CIDR"
+                    "default": "Remote Desktop gateway external access CIDR"
                 },
                 "RDGWInstanceType": {
-                    "default": "Remote Desktop Gateway Instance Type"
+                    "default": "Remote Desktop gateway instance type"
                 },
                 "RestoreModePassword": {
-                    "default": "Restore Mode Password"
+                    "default": "Restore Mode password"
                 },
                 "VPCCIDR": {
                     "default": "VPC CIDR"
@@ -145,6 +159,12 @@
             "Description": "NetBIOS name of the domain (up to 15 characters) for users of earlier versions of Windows e.g. EXAMPLE",
             "MaxLength": "15",
             "MinLength": "1",
+            "Type": "String"
+        },
+        "EditHostAccessCIDR": {
+            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
+            "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
+            "Description": "The allowed CIDR block for external access to the Edit Host instances. The CIDR block parameter must be in the form x.x.x.x/x.",
             "Type": "String"
         },
         "EditHostInstanceType": {
@@ -481,6 +501,9 @@
                     },
                     "DomainNetBIOSName": {
                         "Ref": "DomainNetBIOSName"
+                    },
+                    "EditHostAccessCIDR": {
+                        "Ref": "EditHostAccessCIDR"
                     },
                     "EditHostInstanceType": {
                         "Ref": "EditHostInstanceType"
