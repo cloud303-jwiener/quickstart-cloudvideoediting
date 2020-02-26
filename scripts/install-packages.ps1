@@ -8,6 +8,10 @@ try {
     #
     # Install packages
     #
+	$AllProtocols = [System.Net.SecurityProtocolType]'Ssl3,Tls,Tls11,Tls12'
+    [System.Net.ServicePointManager]::SecurityProtocol = $AllProtocols
+    [System.Net.ServicePointManager]::ServerCertificateValidationCallback = {$true}
+
     Write-Verbose "Install Chocolatey"
     $url = 'https://chocolatey.org/install.ps1'
     iex ((new-object net.webclient).DownloadString($url))
