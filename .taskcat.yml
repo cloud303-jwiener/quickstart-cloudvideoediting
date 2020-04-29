@@ -1,0 +1,30 @@
+project:
+  name: quickstart-cloudvideoediting
+  owner: quickstart@amazon.com
+  package_lambda: false
+  s3_regional_buckets: false
+  shorten_stack_name: true
+  regions:
+  - ap-northeast-1
+  - ap-southeast-2
+  - eu-central-1
+  - eu-west-1
+  - us-east-1
+  - us-east-2
+  - us-west-1
+  - us-west-2
+  s3_bucket: ''
+tests:
+  cloud-videoediting:
+    parameters:
+      AvailabilityZones: $[alfred_getaz_2]
+      DomainAdminPassword: $[alfred_genpass_32]
+      DomainAdminUser: Admin
+      EditHostAccessCIDR: 10.0.0.0/16
+      EditHostInstanceType: g3.4xlarge
+      KeyPairName: $[alfred_getkeypair]
+      QSS3BucketName: $[taskcat_autobucket]
+      RDGWCIDR: 10.0.0.0/16
+      RestoreModePassword: $[alfred_genpass_32]
+    s3_bucket: ''
+    template: templates/cloud-video-editing-master.template
